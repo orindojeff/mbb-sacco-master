@@ -1,0 +1,44 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %} CART{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Cart</h5>
+
+         <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"><small>Name</small></th>
+                <th scope="col"><small>Sub total</small></th>
+                <th scope="col"><small>items</small></th>
+                <th scope="col"><small>Action</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for item in cart.order_items.all %}
+              <tr>
+                <td><small>{{ item.product.name }}</small></td>
+                <td><small>{{ item.total }}</small></td>
+                <td><small>{{ item.quantity }}</small></td>
+                <td><a href="{% url 'rider:delete-from-cart' product_id=item.product.pk %}" class="btn btn-danger btn-sm"><i class="bi bi-cart-dash-fill"></i></a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+            <h5><b>Total: </b>{{ cart.get_total_amount }}</h5>
+            {% if cart.order_items.all.count > 0 and request.user.has_selected_pickup_station %}
+                <a href="{% url 'rider:checkout' %}" class="btn btn-success shadow">Checkout</a>
+            {% else %}
+                <a href="{% url 'rider:selected-pickup-station' %}" class="btn btn-success shadow">Select Pickup Station</a>
+            {% endif %}
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

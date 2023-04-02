@@ -1,0 +1,27 @@
+{% extends 'sales/layouts/base.html' %}
+{% block title %}Product Loan Order Payment List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Feedback</h5>
+            <div class="row">
+            {% for dialog in dialog_list %}
+                <a href="{% url 'sales:customer-feedback' customer_id=dialog.customer.pk %}">
+                  <div class="col-lg-6 col-md-12 col-6 mb-3 shadow-lg rounded p-3">
+                  {{ dialog.customer }}
+                  </div>
+                </a>
+            {% endfor %}
+          </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/order-details.html" %}
+{% endblock %}

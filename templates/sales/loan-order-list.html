@@ -1,0 +1,49 @@
+{% extends 'sales/layouts/base.html' %}
+{% block title %}Product Loan List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Product Loan List</h5>
+        <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small>Trans_id</small></th>
+                <th scope="col"><small>Name</small></th>
+                <th scope="col"><small>Duration</small></th>
+                <th scope="col"><small>Installments</small></th>
+                <th scope="col"><small>Total</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for loan in object_list %}
+              <tr>
+                <th scope="row"><small>{{ loan.transaction_id }}</small></th>
+                <td><small></small>{{ loan.product_loan.product.name }}</td>
+                <td><small></small>{{ loan.product_loan.get_duration_display }}</td>
+                <td><small></small>{{ loan.product_loan.monthly_installment }}</td>
+                <td><small></small>{{ loan.product_loan.total_amount }}</td>
+                {% if not loan.assigned %}
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#order-{{ loan.transaction_id }}">
+                        Assign Driver
+                    </button>
+                </td>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+          <!-- End Default Table Example -->
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/assign-loan-order.html" %}
+{% endblock %}

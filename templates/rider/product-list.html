@@ -1,0 +1,29 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %}Product List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+      {% for product in product_list %}
+        <div class="col-6 col-md-4 col-lg-4">
+          <div class="card">
+              <a href="{% url 'rider:product-detail' pk=product.pk %}">
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 100px; object-fit: cover;">
+                  </a>
+            <div class="card-body">
+                <a href="{% url 'rider:product-detail' pk=product.pk %}">
+              <h5 class="card-title text-capitalize mb-0">{{ product.name }}</h5>
+                </a>
+                <p class="mb-0">{{ product.amount }}</p>
+                <p class="text-uppercase h6"><b>Type: </b>{{ product.category.name }}</p>
+                <a href="{% url 'rider:add-to-cart' product_id=product.pk %}" class="btn btn-primary btn-sm shadow"><i class="bi bi-cart-plus"></i>
+            <small>Add to cart</small></a>
+                <button type="button" class="btn btn-info btn-sm shadow mt-2 text-white" data-bs-toggle="modal" data-bs-target="#product-{{ product.pk }}">
+            <small>Order with loan</small></button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  </div>
+</section>
+{% include "rider/includes/product-loan.html" %}
+{% endblock %}

@@ -1,0 +1,60 @@
+{% for order in object_list %}
+<div class="modal fade" id="order-{{ order.transaction_id }}" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title h1">Transaction id: {{ order.transaction_id}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {% for order_item in order.order_items.all %}
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{{ order_item.product.image.url }}" class="img-fluid rounded-start" alt="{{order_item.product.name}}">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Category: {{ order_item.product.category.name }}</h5>
+                  <h5 class="card-title">Amount: {{ order_item.product.amount }}</h5>
+                  <h5 class="card-title">Quantity: {{ order_item.quantity }}</h5>
+                  <p class="card-text">Total Amount: {{ order_item.total }}</p>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Card with an image on left -->
+                {% endfor %}
+                {% if not order.assigned %}
+                     <div class="card mb-3">
+                        <div class="card-body">
+                          <h5 class="card-title">Assign Driver Order</h5>
+                            <form method="POST" action="{% url 'sales:assign-driver-order' pk=order.pk %}">
+                                {% csrf_token %}
+                                <div class="col-12">
+                                    <label class="form-label">Select Driver</label>
+                                    <select name="driver" class="form-control" required>
+                                        <option disabled>Select Driver</option>
+                                        {% for driver in drivers %}
+                                            <option value="{{ driver.pk }}">{{ driver }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-12">
+                                    <button type="submit" class="btn btn-primary shadow">
+                                      Assign Driver
+                                    </button>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- End Card with an image on left -->
+                {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endfor %}

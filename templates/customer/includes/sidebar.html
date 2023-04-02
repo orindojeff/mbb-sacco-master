@@ -1,0 +1,65 @@
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/" %}collapsed{% endif %}" href="{% url 'customer:index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/product-list/" %}collapsed{% endif %}" href="{% url 'customer:product-list' %}">
+          <i class="bi bi-bicycle"></i>
+          <span>Products</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/order-list/" %}collapsed{% endif %}" href="{% url 'customer:order-list' %}">
+          <i class="bi bi-collection-fill"></i>
+          <span>Orders</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/pickup-station/" %}collapsed{% endif %}" href="{% url 'customer:pickup-station' %}">
+          <i class="bi bi-truck"></i>
+          <span>PickUp station</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/selected-pickup-station/" %}collapsed{% endif %}" href="{% url 'customer:selected-pickup-station' %}">
+          <i class="bi bi-truck"></i>
+          <span>Selected PickUp station</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/order-payment-list/" %}collapsed{% endif %}" href="{% url 'customer:order-payment-list' %}">
+          <i class="bi bi-credit-card"></i>
+          <span>Order Payments</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/feedback/" %}collapsed{% endif %}" href="{% url 'customer:feedback' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>Feedback</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/customer/faq-list/" %}collapsed{% endif %}" href="{% url 'customer:faq-list' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

@@ -1,0 +1,66 @@
+{% extends 'customer/layouts/base.html' %}
+{% block title %}Feedback{% endblock %}
+{% block content %}
+
+    <section class="section">
+      <div class="row">
+          <div class="col-12">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">
+                  Feedback
+              </h5>
+ <!-- Bordered Tabs Justified -->
+              <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="finance-manager-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-finance-manager" type="button" role="tab" aria-controls="finance-manager" aria-selected="true">Finance Manager</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="service-manager-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-service-manager" type="button" role="tab" aria-controls="service-manager" aria-selected="false">Sales Manager</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+                <div class="tab-pane fade" id="bordered-justified-finance-manager" role="tabpanel" aria-labelledby="finance-manager-tab">
+                  {% for feedback in feedback_list %}
+                        {% if feedback.type == "CST_FMR" or feedback.type == "FMR_CST" %}
+                          {% if feedback.has_been_sent %}
+                            <div class="shadow p-3 bg-primary rounded text-white mt-2">{{ feedback.content }}</div>
+                          {% else %}
+                            <div class="shadow p-3 bg-gradient rounded mt-2">{{ feedback.content }}</div>
+                          {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="tab-pane fade" id="bordered-justified-service-manager" role="tabpanel" aria-labelledby="service-manager-tab">
+                      {% for feedback in feedback_list %}
+            {% if feedback.type == "CST_SMR" or feedback.type == "SMR_CST"%}
+              {% if feedback.has_been_sent %}
+                <div class="shadow p-3 bg-primary rounded text-white mt-2">{{ feedback.content }}</div>
+              {% else %}
+                <div class="shadow p-3 bg-gradient rounded mt-2">{{ feedback.content }}</div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+                </div>
+              </div><!-- End Bordered Tabs Justified -->
+
+              <!-- General Form Elements -->
+              <form method="post">
+                {% csrf_token %}
+                {% include 'components/form-errors.html' with form=form %}
+                {% include 'components/main-form.html' with form=form %}
+                <div class="row mt-3">
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary shadow">
+                       Send
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          </div>
+      </div>
+    </section>
+    {% endblock %}

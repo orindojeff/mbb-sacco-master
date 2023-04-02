@@ -1,0 +1,27 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %} Order List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+        <p class="text-center display-6">Order List</p>
+      {% for order in order_list %}
+        <div class="col-6 col-md-4 col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ order.transaction_id }}</h5>
+                <p  class="mb-0"><small>{{ order.created }}</small></p>
+                <p class="mb-0"><small>Items: {{ order.get_total_items }}</small></p>
+                <p class="mb-0"><small>{{ order.get_total_amount }}</small></p>
+                <a href="{% url 'rider:order-pdf' pk=order.pk %}" class="btn btn-primary btn-sm"><small>Download Pdf</small></a>
+                {% if not order.arrived %}
+                    <a href="{% url 'rider:order-delivery-detail' pk=order.pk %}" class="btn btn-primary btn-sm mt-3 shadow"><small>Track delivery progress</small></a>
+                {% else %}
+                    <p  class="mb-0 text-success">Arrived</p>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  </div>
+</section>
+{% endblock %}

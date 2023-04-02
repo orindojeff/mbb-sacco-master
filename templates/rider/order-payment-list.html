@@ -1,0 +1,39 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %} Order payment List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Order payment List</h5>
+            <div class="table-responsive">
+         <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small class="text-uppercase">trans_id</small></th>
+                <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>action</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for order_payment in order_payment_list %}
+              <tr>
+                <th scope="row"><small>{{ order_payment.transaction_id }}</small></th>
+                <td><small>{{ order_payment.amount }}</small></td>
+                  <td>
+                     <a href="{% url 'rider:order-payment-pdf' pk=order_payment.pk %}" class="btn btn-primary btn-sm shadow">Download</a>
+                  </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

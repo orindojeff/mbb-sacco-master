@@ -1,0 +1,50 @@
+{% extends 'sales/layouts/base.html' %}
+{% block title %}Order List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Order List</h5>
+                        <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">transaction_id</th>
+                <th scope="col">User</th>
+                <th scope="col">status</th>
+                <th scope="col">items</th>
+                <th scope="col">total</th>
+                <th scope="col">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for order in object_list %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ order.transaction_id }}</td>
+                <td>{{ order.user.name }}</td>
+                <td>{% if order.complete %} Completed {% else %} Incomplete {% endif %}</td>
+                <td>{{ order.get_total_items }}</td>
+                <td>{{ order.get_total_amount }}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#order-{{ order.transaction_id }}">
+                        Details
+                    </button>
+                </td>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/order-details.html" %}
+{% endblock %}

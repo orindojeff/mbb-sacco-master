@@ -1,0 +1,45 @@
+{% extends 'sales/layouts/base.html' %}
+{% block title %}Create Product{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Product List</h5>
+            <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for product in object_list %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ product.name }}</td>
+                <td><a href="{% url 'sales:product-update' pk=product.pk %}" class="btn btn-sm btn-primary">Edit</a></td>
+                  <td>
+                      <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#product-{{ product.id }}">
+                        Details
+                      </button>
+                  </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/product-details.html" %}
+{% endblock %}

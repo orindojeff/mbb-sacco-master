@@ -1,0 +1,126 @@
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/" %}collapsed{% endif %}" href="{% url 'rider:index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/savings-withdrawal/" %}collapsed{% endif %}" href="{% url 'rider:savings-withdrawal' %}">
+          <i class="bi bi-bank"></i>
+          <span>Withdraw Savings</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/applied-loan-list/" %}collapsed{% endif %}" href="{% url 'rider:applied-loan-list' %}">
+          <i class="bi bi-bank"></i>
+          <span>Applied Loans</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/apply-loan/" %}collapsed{% endif %}" href="{% url 'rider:apply-loan' %}">
+          <i class="bi bi-wallet-fill"></i>
+          <span>Apply Loan</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/loan-repayment-list/" %}collapsed{% endif %}" href="{% url 'rider:loan-repayment-list' %}">
+          <i class="bi bi-wallet2"></i>
+          <span>Loan Payments</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/loan-repayment/" %}collapsed{% endif %}" href="{% url 'rider:loan-repayment' %}">
+          <i class="bi bi-cash-stack"></i>
+          <span>Pay Loan</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/saving/" %}collapsed{% endif %}" href="{% url 'rider:saving' %}">
+          <i class="bi bi-bank2"></i>
+          <span>Save</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/product-list/" %}collapsed{% endif %}" href="{% url 'rider:product-list' %}">
+          <i class="bi bi-bicycle"></i>
+          <span>Products</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/loan-order-list/" %}collapsed{% endif %}" href="{% url 'rider:loan-order-list' %}">
+          <i class="bi bi-cash-coin"></i>
+          <span>Product Loan Orders</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/pay-product-loan/" %}collapsed{% endif %}" href="{% url 'rider:pay-product-loan' %}">
+          <i class="bi bi-cash-stack"></i>
+          <span>Pay Product Loan</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/product-loan-payment-list/" %}collapsed{% endif %}" href="{% url 'rider:product-loan-payment-list' %}">
+          <i class="bi bi-cash-stack"></i>
+          <span>Product Loan Payments</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/order-list/" %}collapsed{% endif %}" href="{% url 'rider:order-list' %}">
+          <i class="bi bi-collection-fill"></i>
+          <span>Orders</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/pickup-station/" %}collapsed{% endif %}" href="{% url 'rider:pickup-station' %}">
+          <i class="bi bi-truck"></i>
+          <span>PickUp station</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/selected-pickup-station/" %}collapsed{% endif %}" href="{% url 'rider:selected-pickup-station' %}">
+          <i class="bi bi-truck"></i>
+          <span>Selected PickUp station</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/order-payment-list/" %}collapsed{% endif %}" href="{% url 'rider:order-payment-list' %}">
+          <i class="bi bi-credit-card"></i>
+          <span>Order Payments</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+          <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/feedback/" %}collapsed{% endif %}" href="{% url 'rider:feedback' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>Feedback</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/faq-list/" %}collapsed{% endif %}" href="{% url 'rider:faq-list' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

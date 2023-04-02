@@ -1,0 +1,71 @@
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/" %}collapsed{% endif %}" href="{% url 'sales:index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+        <li class="nav-item">
+            <a href="{% url 'sales:category-create' %}" class="nav-link {% if not request.path == "/sales/category-create/" %}collapsed{% endif %}">
+              <i class="bi bi-command"></i><span>Create Category</span>
+            </a>
+          </li>
+         <li class="nav-item">
+            <a href="{% url 'sales:category-list' %}" class="nav-link {% if not request.path == "/sales/category-list/" %}collapsed{% endif %}">
+              <i class="bi bi-border-style"></i><span>Category List</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if not request.path == "/sales/product-create/" %}collapsed{% endif %}" href="{% url 'sales:product-create' %}">
+              <i class="bi bi-bicycle"></i><span>Create Product</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if not request.path == "/sales/product-list/" %}collapsed{% endif %}" href="{% url 'sales:product-list' %}">
+              <i class="bi bi-list"></i><span>Product List</span>
+            </a>
+          </li>
+
+{#      <li class="nav-heading">Orders</li>#}
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/product-loan-list/" %}collapsed{% endif %}" href="{% url 'sales:product-loan-list' %}">
+          <i class="bi bi-bicycle"></i>
+          <span>Product Loan List</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/order-list/" %}collapsed{% endif %}" href="{% url 'sales:order-list' %}">
+          <i class="bi bi-truck"></i>
+          <span>Orders List</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/loan-order-list/" %}collapsed{% endif %}" href="{% url 'sales:loan-order-list' %}">
+          <i class="bi bi-safe2-fill"></i>
+          <span>Loan Orders List</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+        <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/feedback/" %}collapsed{% endif %}" href="{% url 'sales:feedback' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>Feedback</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/faq-list/" %}collapsed{% endif %}" href="{% url 'sales:faq-list' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

@@ -1,0 +1,61 @@
+{% extends 'driver/layouts/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Pending Order Delivery</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-truck"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ pending_order_delivery.count }}</h6>
+                      <a href="{% url 'driver:order-delivery' %}" class="btn btn-primary btn-sm shadow">Delivery List</a>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Pending Loans Orders</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-truck"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ pending_loan_order_delivery.count }}</h6>
+                      <a href="{% url 'driver:loan-order-delivery' %}" class="btn btn-primary btn-sm shadow">Delivery List</a>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+      </div>
+    </section>
+    {% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'sales/layouts/base.html' %}
+{% block title %}Category List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Category List</h5>
+            <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for category in object_list %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ category.name }}</td>
+                <td><a href="{% url 'sales:category-update' pk=category.pk %}" class="btn btn-sm btn-primary">Edit</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

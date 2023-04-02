@@ -1,0 +1,62 @@
+<html>
+ <head>
+   <title>Order {{order.order_id}}</title>
+   <style>
+     h1 {
+        margin-bottom: 1em;
+        font-size: 1em;
+        font-weight: bold;
+        text-align: center;
+     }
+    body {
+      font-family: $helvetica;
+      color: rgba(94,93,82,1);
+    }
+     table {
+        margin-bottom: 1.5em;
+        border-spacing: 0;
+        border: 1px solid;
+        margin: 0 auto;
+        width: 100%;
+     }
+
+     th {
+       background-color: rgba(29,150,178,1);
+      border: 1px solid rgba(29,150,178,1);
+      font-weight: normal;
+      text-align: center;
+      color: white;
+     }
+     td{
+        border-left: 1px solid  rgba(29,150,178,1);
+        border-bottom: 1px solid  rgba(29,150,178,1);
+        text-align: center;
+     }
+   </style>
+ </head>
+ <body>
+   <h3>Order: {{order.order_id}}</h3>
+   <h3>Total: Ksh. {{order.get_total_amount}}</h3>
+   <table>
+     <thead>
+       <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+       </tr>
+     </thead>
+     <tbody>
+        {% for object in order.items.all %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{object.item.name}}</td>
+              <td>{{object.item.price}}</td>
+              <td>{{object.quantity}}</td>
+            </tr>
+        {% endfor %}
+
+     </tbody>
+   </table>
+ </body>
+</html>

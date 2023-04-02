@@ -1,0 +1,37 @@
+{% for product in product_list %}
+<div class="modal fade" id="product-{{ product.pk }}" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title h1">Name: {{ product.name}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-12">
+                <div class="card-body">
+                  <form method="post" action="{% url 'rider:order-product-loan' product_id=product.pk %}">
+                    {% csrf_token %}
+                    {% include 'components/form-errors.html' with form=product_loan_form %}
+                    {% include 'components/main-form.html' with form=product_loan_form %}
+                    <div class="row mt-3">
+                      <div class="col-12">
+                        <button type="submit" class="btn btn-primary shadow">
+                            Order
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Card with an image on left -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endfor %}

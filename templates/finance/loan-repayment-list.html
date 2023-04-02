@@ -1,0 +1,46 @@
+{% extends 'finance/layouts/base.html' %}
+{% block title %}Loan Payment List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Loan Payment List</h5>
+            <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small>Mpesa</small></th>
+                <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>Action</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for loan in loan_repayment_list %}
+              <tr>
+                <td><small>{{ loan.mpesa_code }}</small></td>
+                <td><small>{{ loan.amount }}</small></td>
+                <td>
+                    {% if not loan.confirmed %}
+                        <a href="{% url 'finance:confirm-loan-repayment' pk=loan.pk %}" type="button" class="btn btn-sm btn-primary">
+                            Approve
+                        </a>
+                    {% else %}
+                        Approved
+                    {% endif %}
+                </td>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/order-details.html" %}
+{% endblock %}

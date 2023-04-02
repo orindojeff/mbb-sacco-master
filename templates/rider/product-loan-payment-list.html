@@ -1,0 +1,42 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %} Product Loan Payment List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Product Loan Payment List</h5>
+            <div class="table-responsive">
+         <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>mpesa</small></th>
+                <th scope="col"><small>type</small></th>
+                <th scope="col"><small>status</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for loan_payment in product_loan_payment_list %}
+              <tr>
+                <td><small>{{ loan_payment.amount }}</small></td>
+                <td><small>{{ loan_payment.mpesa_code }}</small></td>
+                <td><small>{{ loan_payment.get_type_display }}</small></td>
+                  <td>
+                      <small>{% if loan_payment.confirmed %} Confirmed {% else %} Pending {% endif %}</small>
+                  </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/product-details.html" %}
+{% endblock %}

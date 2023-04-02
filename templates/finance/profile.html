@@ -1,0 +1,34 @@
+{% extends 'finance/layouts/base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+    <section class="section">
+      <div class="row">
+          <div class="col-12">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">
+                  Profile
+              </h5>
+              <!-- General Form Elements -->
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include 'components/form-errors.html' with form=user_form %}
+                {% include 'components/main-form.html' with form=user_form %}
+                {% include 'components/form-errors.html' with form=form %}
+                {% include 'components/main-form.html' with form=form %}
+                <div class="row mt-3">
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary shadow">
+                       Update
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          </div>
+      </div>
+    </section>
+    {% endblock %}

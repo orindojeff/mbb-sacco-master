@@ -1,0 +1,21 @@
+{% extends 'customer/layouts/base.html' %}
+{% block title %}Product Details{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body">
+          <h5 class="card-title text-capitalize mb-0">{{ product.name }}</h5>
+            <p class="mb-0">{{ product.amount }}</p>
+            <p class="mb-0">{{ product.description|safe }}</p>
+            <p class="text-uppercase h6"><b>Type: </b>{{ product.category.name }}</p>
+            <a href="{% url 'customer:add-to-cart' product_id=product.pk %}" class="btn btn-primary shadow"><i class="bi bi-cart-plus"></i>
+        <small>Add to cart</small></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

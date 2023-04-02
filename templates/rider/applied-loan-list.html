@@ -1,0 +1,42 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %}Applied Loan List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Applied Loan List</h5>
+
+          <!-- Default Table -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>status</small></th>
+                <th scope="col"><small>type</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for loan in object_list %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><small>{{ loan.amount }}</small></td>
+                <td><small>{{ loan.get_status_display }}</small></td>
+                  <td>
+                      <small>{{ loan.get_type_display }}</small>
+                  </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/product-details.html" %}
+{% endblock %}

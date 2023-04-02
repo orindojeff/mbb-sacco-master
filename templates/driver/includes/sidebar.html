@@ -1,0 +1,66 @@
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/" %}collapsed{% endif %}" href="{% url 'driver:index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/order-delivery/" %}collapsed{% endif %}" href="{% url 'driver:order-delivery' %}">
+          <i class="bi bi-truck"></i>
+          <span>Pending Order Delivery</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/in-transit-order-delivery/" %}collapsed{% endif %}" href="{% url 'driver:in-transit-order-delivery' %}">
+          <i class="bi bi-truck"></i>
+          <span>Order Delivery in Transit</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/completed-order-delivery/" %}collapsed{% endif %}" href="{% url 'driver:completed-order-delivery' %}">
+          <i class="bi bi-truck"></i>
+          <span>Completed Order Delivery</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/loan-order-delivery/" %}collapsed{% endif %}" href="{% url 'driver:loan-order-delivery' %}">
+          <i class="bi bi-truck"></i>
+          <span>Pending Loan Order Delivery</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/in-transit-loan-order-delivery/" %}collapsed{% endif %}"
+           href="{% url 'driver:in-transit-loan-order-delivery' %}">
+          <i class="bi bi-truck"></i>
+          <span>Loan Order Delivery  in Transit</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/completed-loan-order-delivery/" %}collapsed{% endif %}"
+           href="{% url 'driver:completed-loan-order-delivery' %}">
+          <i class="bi bi-truck"></i>
+          <span>Completed Loan Order Delivery</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/driver/faq-list/" %}collapsed{% endif %}" href="{% url 'driver:faq-list' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

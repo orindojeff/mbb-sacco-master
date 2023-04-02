@@ -1,0 +1,51 @@
+{% extends 'driver/layouts/base.html' %}
+{% block title %}Loan Order Delivery List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Loan Order Delivery List</h5>
+            <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small>Order</small></th>
+                <th scope="col"><small>station</small></th>
+                <th scope="col"><small>Action</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for order in loan_order_delivery_list %}
+              <tr>
+                <td><small>{{ order.order.transaction_id }}</small></td>
+                <td><small>{{ order.station }}</small></td>
+                <td>
+                    {% if not order.status == "AR" and not order.status == "IT" %}
+                            <a href="{% url 'driver:mark-loan-order-as-in-transit' pk=order.pk %}" type="button" class="btn btn-sm btn-primary">
+                                Mark as in transit
+                            </a>
+                    {% endif %}
+                    {% if not order.status == "AR" %}
+                        <a href="{% url 'driver:mark-loan-order-as-arrived' pk=order.pk %}" type="button" class="btn btn-sm btn-success">
+                            Mark as arrived
+                        </a>
+                    {% else %}
+                    {{ order.get_status_display }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/order-details.html" %}
+{% endblock %}

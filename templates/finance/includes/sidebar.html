@@ -1,0 +1,81 @@
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/" %}collapsed{% endif %}" href="{% url 'finance:index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/loan-list/" %}collapsed{% endif %}" href="{% url 'finance:loan-list' %}">
+          <i class="bi bi-credit-card-fill"></i>
+          <span>Loan Application List</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/loan-order-payment-list/" %}collapsed{% endif %}" href="{% url 'finance:loan-order-payment-list' %}">
+          <i class="bi bi-credit-card-fill"></i>
+          <span>Pending Product Loan Payments</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/approved-loan-order-payment-list/" %}collapsed{% endif %}"
+           href="{% url 'finance:approved-loan-order-payment-list' %}">
+          <i class="bi bi-credit-card-fill"></i>
+          <span>Approved Product Loan Payments</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/loan-repayment-list/" %}collapsed{% endif %}" href="{% url 'finance:loan-repayment-list' %}">
+          <i class="bi bi-alipay"></i>
+          <span>Pending Loan Payments</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/approved-loan-repayment-list/" %}collapsed{% endif %}"
+           href="{% url 'finance:approved-loan-repayment-list' %}">
+          <i class="bi bi-alipay"></i>
+          <span>Approved Loan Payments</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/order-payment-list/" %}collapsed{% endif %}" href="{% url 'finance:order-payment-list' %}">
+          <i class="bi bi-truck"></i>
+          <span>Pending Order Payments</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/approved-order-payment-list/" %}collapsed{% endif %}"
+           href="{% url 'finance:approved-order-payment-list' %}">
+          <i class="bi bi-truck"></i>
+          <span>Approved Order Payments</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/feedback/" %}collapsed{% endif %}" href="{% url 'finance:feedback' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>Feedback</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/finance/faq-list/" %}collapsed{% endif %}" href="{% url 'finance:faq-list' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

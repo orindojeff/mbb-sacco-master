@@ -1,0 +1,46 @@
+{% extends 'finance/layouts/base.html' %}
+{% block title %} Order Payment List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"> Order Payment List</h5>
+            <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small>Mpesa</small></th>
+                <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>Action</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for order in order_payment_list %}
+              <tr>
+                <td><small>{{ order.mpesa_code }}</small></td>
+                <td><small>{{ order.amount }}</small></td>
+                <td>
+                    {% if not order.confirm %}
+                        <a href="{% url 'finance:confirm-order-payment' pk=order.pk %}" type="button" class="btn btn-sm btn-primary">
+                            Approve
+                        </a>
+                    {% else %}
+                        Approved
+                    {% endif %}
+                </td>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/order-details.html" %}
+{% endblock %}

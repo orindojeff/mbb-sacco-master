@@ -1,0 +1,40 @@
+{% extends 'sales/layouts/base.html' %}
+{% block title %}Product Loan List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Product Loan List</h5>
+            <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small>Name</small></th>
+                <th scope="col"><small>Duration</small></th>
+                <th scope="col"><small>instalments</small></th>
+                <th scope="col"><small>Total</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for product_loan in object_list %}
+              <tr>
+                <td><small>{{ product_loan.product.name }}</small></td>
+                <td><small>{{ product_loan.get_duration_display }}</small></td>
+                <td><small>{{ product_loan.monthly_installment }}</small></td>
+                <td><small>{{ product_loan.total_amount }}</small></td>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/product-details.html" %}
+{% endblock %}

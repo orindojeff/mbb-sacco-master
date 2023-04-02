@@ -1,0 +1,50 @@
+{% extends 'finance/layouts/base.html' %}
+{% block title %}Loan List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Loan List</h5>
+            <div class="table-responsive">
+          <!-- Default Table -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"><small>Applicant</small></th>
+                <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>Status</small></th>
+                <th scope="col"><small>Type</small></th>
+                <th scope="col"><small>Purpose</small></th>
+                <th scope="col"><small></small></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for loan in loan_list %}
+              <tr>
+                <td><small>{{ loan.user }}</small></td>
+                <td><small>{{ loan.amount }}</small></td>
+                <td><small>{{ loan.get_status_display }}</small></td>
+                <td><small>{{ loan.get_type_display }}</small></td>
+                <td><small>{{ loan.purpose }}</small></td>
+                <td>
+                    {% if loan.status != "AP" %}
+                        <a href="{% url 'finance:confirm-loan' pk=loan.pk %}" type="button" class="btn btn-sm btn-primary">
+                            Approve
+                        </a>
+                    {% endif %}
+                </td>
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+          <!-- End Default Table Example -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "sales/includes/order-details.html" %}
+{% endblock %}

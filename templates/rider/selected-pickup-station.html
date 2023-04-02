@@ -1,0 +1,27 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %} Selected Pickup Station{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+        <p class="text-center display-6">Selected Pickup Station</p>
+      {% for station in selected_pickup_station_list %}
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-capitalize">Station: {{ station.station.name }}</h5>
+                <p  class="mb-0 text-uppercase">Location: {{ station.station.location.name }}</p>
+                {% if station.selected %}
+                    <a href="#" class="btn btn-dark shadow form-control mt-2 disabled">Selected</a>
+                {% else %}
+                    <a href="{% url 'rider:select-pickup-station' pk=station.pk %}" class="btn btn-primary shadow form-control mt-2">Select Station</a>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    <div class="col-12">
+        <a href="{% url 'rider:pickup-station' %}" class="btn btn-primary shadow form-control mt-2">Add pickup station</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

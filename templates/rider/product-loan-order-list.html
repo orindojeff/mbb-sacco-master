@@ -1,0 +1,26 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %} Order List{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="row">
+      {% for order in product_loan_order_list %}
+        <div class="col-12">
+          <div class="card">
+            <img src="{{ order.product_loan.product.image.url }}" class="img-fluid rounded-start" alt="{{order.product_loan.product.name}}" style="height: 90px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title">{{ order.transaction_id }}</h5>
+                <p>{{ order.product_loan.product.name }}</p>
+                <p>Total Amount: {{ order.product_loan.total_amount }}</p>
+                <p>Remaining Amount: {{ order.get_remaining_amount }}</p>
+
+{#                <p>Deposit {{ order.product_loan.get_deposit }}</p>#}
+                {% if not order.deposit_paid %}
+                <a href="{% url 'rider:product-loan-checkout' pk=order.pk %}" class="btn btn-primary shadow">Checkout</a>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  </div>
+</section>
+{% endblock %}

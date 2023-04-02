@@ -1,0 +1,6 @@
+/core/settings.ini
+/core/__pycache__/
+/media/
+/venv/
+/.idea/
+/db.sqlite3
