@@ -1,0 +1,13 @@
+{% extends 'finance/layouts/base.html' %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    Account Total
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{account.name}} Balance</h5>
+    <p class="card-text">{{ account.amount }}</p>
+  </div>
+</div>
+{% endblock %}

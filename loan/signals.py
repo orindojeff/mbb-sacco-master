@@ -29,7 +29,7 @@ def creating_loan_repayment(sender, instance, created, **kwargs):
                 LoanRepayment(loan=instance, amount=Money(monthly_payment_amount, "KES")),
             ]
             LoanRepayment.objects.bulk_create(loan_repayment_objs)
-        elif instance.type == "Y":
+        else:
             amount = instance.amount.amount
             monthly_payment_amount = amount / 12
             loan_repayment_objs = [
@@ -47,11 +47,8 @@ def creating_loan_repayment(sender, instance, created, **kwargs):
                 LoanRepayment(loan=instance, amount=Money(monthly_payment_amount, "KES")),
             ]
             LoanRepayment.objects.bulk_create(loan_repayment_objs)
-    else:
-        if instance.status == "AP":
-            saving = Saving.objects.filter(user=instance.user).first()
-            saving.amount += instance.amount
-            saving.save()
+
+
 
 
 @receiver(post_save, sender=SavingTransaction, dispatch_uid="update_savings")
@@ -66,12 +63,12 @@ def update_savings(sender, instance, created, **kwargs):
         saving.save()
 
 
-@receiver(post_save, sender=SavingsWithdrawal, dispatch_uid="update_savings_after_withdrawal")
-def update_savings_after_withdrawal(sender, instance, created, **kwargs):
-    if created:
-        saving = Saving.objects.filter(user=instance.user).first()
-        withdrawn_amount = instance.amount.amount
-        current_saving_amount = saving.amount.amount
-        current_saving_amount -= withdrawn_amount
-        saving.amount = Money(current_saving_amount, "KES")
-        saving.save()
+# @receiver(post_save, sender=SavingsWithdrawal, dispatch_uid="update_savings_after_withdrawal")
+# def update_savings_after_withdrawal(sender, instance, created, **kwargs):
+#     if created:
+#         saving = Saving.objects.filter(user=instance.user).first()
+#         withdrawn_amount = instance.amount.amount
+#         current_saving_amount = saving.amount.amount
+#         current_saving_amount -= withdrawn_amount
+#         saving.amount = Money(current_saving_amount, "KES")
+#         saving.save()

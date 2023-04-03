@@ -25,7 +25,7 @@
                 <td><small>{{ loan_payment.mpesa_code }}</small></td>
                 <td><small>{{ loan_payment.get_type_display }}</small></td>
                   <td>
-                      <small>{% if loan_payment.confirmed %} Confirmed {% else %} Pending {% endif %}</small>
+                      <small>{% if loan_payment.confirm %} Confirmed {% else %} Pending {% endif %}</small>
                   </td>
               </tr>
             {% endfor %}

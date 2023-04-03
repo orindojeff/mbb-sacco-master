@@ -1,0 +1,41 @@
+{% extends 'finance/layouts/base.html' %}
+
+{% block title %}Pending Savings List{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Approved Shares List</h5>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col"><small>User</small></th>
+                  <th scope="col"><small>Amount</small></th>
+                  <th scope="col"><small>Status</small></th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+              {% for saving in savings_list %}
+                {% if saving.status == 'AP' %}
+                <tr>
+                  <td><small>{{ saving.user.name }}</small></td>
+                  <td><small>{{ saving.amount }}</small></td>
+                  <td><small>{{ saving.get_status_display}}</small></td>
+                  
+                </tr>
+                {% endif %}
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

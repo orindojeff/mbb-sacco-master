@@ -3,7 +3,7 @@ from django.urls import path
 from staff.finance.views import DashboardView, LoanRepaymentList, OrderPaymentList, LoanOrderPaymentList, \
     confirm_loan_repayment, confirm_order_payment, confirm_loan_order_payment, FAQListView, ProfileView, \
     UserChangePasswordView, ApprovedLoanRepaymentList, ApprovedOrderPaymentList, ApprovedLoanOrderPaymentList, \
-    FeedbackCreateView, FeedbackListView, LoanApplicationListView, confirm_loan
+    FeedbackCreateView, FeedbackListView, LoanApplicationListView, confirm_loan, PendingSavingsListView, ApprovedSavingsListView, account_total_view
 
 app_name = "finance"
 
@@ -27,5 +27,10 @@ urlpatterns = [
     path('loan-repayment-list/', LoanRepaymentList.as_view(), name="loan-repayment-list"),
     path('approved-loan-repayment-list/', ApprovedLoanRepaymentList.as_view(),
          name="approved-loan-repayment-list"),
+    path('pending-savings-list/', PendingSavingsListView.as_view(),
+         name="pending-savings-list"),
+    path('approved-savings-list/', ApprovedSavingsListView.as_view(),
+         name="approved-savings-list"),
+    path('account-total', account_total_view, name="account-total"),
     path('', DashboardView.as_view(), name="index"),
 ]

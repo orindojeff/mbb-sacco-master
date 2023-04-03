@@ -29,26 +29,68 @@
               </div>
             </div><!-- End Sales Card -->
 
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card revenue-card">
 
-                <div class="card-body">
-                  <h5 class="card-title">Savings</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-currency-dollar"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>{{ savings.amount }}</h6>
-
-                    </div>
+              <!-- Revenue Card -->
+              <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card revenue-card">
+                      <div class="card-body">
+                          <h5 class="card-title">My Loan Account Balance</h5>
+                          <div class="d-flex align-items-center">
+                              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                  <i class="bi bi-currency-dollar"></i>
+                              </div>
+                              <div class="ps-3">
+                                  {% if loan_account %}
+                                      <h6>{{ total_loan_amount }}</h6>
+                                  {% else %}
+                                      <h6>$0.00</h6>
+                                  {% endif %}
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
+              </div><!-- End Revenue Card -->
 
-              </div>
-            </div><!-- End Revenue Card -->
+
+            <!-- Revenue Card -->
+              <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card revenue-card">
+
+                      <div class="card-body">
+                          <h5 class="card-title">Pending Contributions (shares)</h5>
+
+                          <div class="d-flex align-items-center">
+                              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                  <i class="bi bi-currency-dollar"></i>
+                              </div>
+                              <div class="ps-3">
+                                  <h6>{{ pending_savings }}</h6>
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+              </div><!-- End Revenue Card -->
+
+              <!-- Revenue Card -->
+              <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card revenue-card">
+
+                      <div class="card-body">
+                          <h5 class="card-title">Approved Contributions (shares)</h5>
+
+                          <div class="d-flex align-items-center">
+                              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                  <i class="bi bi-currency-dollar"></i>
+                              </div>
+                              <div class="ps-3">
+                                  <h6>{{ approved_savings }}</h6>
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+              </div><!-- End Revenue Card -->
 
 
           </div>

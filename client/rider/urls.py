@@ -11,6 +11,7 @@ from client.rider.views import DashboardView, AppliedLoanListView, FAQListView, 
 
 app_name = "rider"
 
+
 urlpatterns = [
     path("feedback/", FeedbackCreateView.as_view(), name="feedback"),
     path('confirm-picked/<int:pk>/', confirm_order_picked, name="confirm-picked"),

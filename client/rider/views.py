@@ -23,17 +23,27 @@ from loan.models import LoanApplication, LoanRepaymentTransaction, Saving, Savin
 from stock.forms import OrderPaymentModelForm, RiderProductLoanModelForm, LoanOrderInstallmentsModelForm
 from stock.mixins import CartMixin, GeneratePdfMixin
 from stock.models import Product, Order, OrderPayment, ProductLoan, LoanOrder, LoanOrderInstallments
-
+from loan.models import LoanAccount
 
 class DashboardView(CartMixin, TemplateView):
     template_name = 'rider/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['savings'], created = Saving.objects.get_or_create(user=self.request.user)
+        savings, created = Saving.objects.get_or_create(user=self.request.user)
         context['orders'] = Order.objects.filter(user=self.request.user, complete=True)
         context['order_delivery'] = OrderDelivery.objects.filter(order__user=self.request.user, picked=False)
         context['loan_order_delivery'] = LoanOrderDelivery.objects.filter(order__user=self.request.user, picked=False)
+
+        # loan account
+        loan_accounts = LoanAccount.objects.filter(user=self.request.user)
+        context['loan_account'] = loan_accounts
+        context['total_loan_amount'] = sum([loan_account.amount for loan_account in loan_accounts])
+        
+        # Add savings data to the context
+        context['pending_savings'] = savings.amount if savings.status == Saving.Status.PENDING else 0
+        context['approved_savings'] = savings.amount if savings.status == Saving.Status.APPROVED else 0
+
         return context
 
 
@@ -73,7 +83,10 @@ class LoanApplyView(CartMixin, UserFormKwargsMixin, SuccessMessageMixin, CreateV
         return super().form_valid(form)
 
 
-class LoanRepaymentView(CartMixin, SuccessMessageMixin, UserFormKwargsMixin, CreateView):
+from decimal import Decimal
+
+
+class LoanRepaymentView(CartMixin, SuccessMessageMixin, CreateView):
     model = LoanRepaymentTransaction
     form_class = LoanRepaymentTransactionModelForm
     template_name = "rider/loan-repayment.html"
@@ -83,11 +96,42 @@ class LoanRepaymentView(CartMixin, SuccessMessageMixin, UserFormKwargsMixin, Cre
     def form_valid(self, form):
         instance = form.save(commit=False)
         repayment = instance.repayment
-        instance.amount = repayment.amount
-        instance.save()
         repayment.paid = True
         repayment.save()
         return super().form_valid(form)
+
+
+# from django.contrib.messages.views import SuccessMessageMixin
+# from django.urls import reverse_lazy
+# from django.views.generic import CreateView
+
+
+# class LoanRepaymentView(CartMixin, SuccessMessageMixin, UserFormKwargsMixin, CreateView):
+#     template_name = 'rider/loan-repayment.html'
+#     form_class = LoanRepaymentTransactionModelForm
+#     success_url = reverse_lazy('loan_repayment_success')
+#     success_message = 'Loan repayment transaction has been submitted successfully'
+
+#     def get_form_kwargs(self):
+#         kwargs = super().get_form_kwargs()
+#         kwargs['user'] = self.request.user # pass the user to the form
+#         repayment_id = self.request.GET.get('repayment_id')
+#         if repayment_id:
+#             repayment = LoanRepayment.objects.get(id=repayment_id)
+#             kwargs['instance'] = LoanRepaymentTransaction(repayment=repayment)
+#         return kwargs
+
+#     def form_valid(self, form):
+#         transaction = form.save()
+#         repayment = transaction.repayment
+#         # Update LoanRepayment's min_repayment field with the calculated minimum repayment
+#         repayment.min_repayment = repayment.calculate_min_repayment()
+#         repayment.save()
+#         return super().form_valid(form)
+
+
+
+
 
 
 class LoanRepaymentListView(CartMixin, ListView):
@@ -230,10 +274,11 @@ class CheckoutView(CartMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
+
+
 class ProductLoanView(CartMixin, TemplateView):
     form_class = RiderProductLoanModelForm
     template_name = "rider/product-list.html"
-    success_url = reverse_lazy('rider:index')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -241,24 +286,21 @@ class ProductLoanView(CartMixin, TemplateView):
         context['product_list'] = Product.objects.all()
         return context
 
-    def get(self, *args, **kwargs):
-        return render(self.request, self.template_name, self.get_context_data(**kwargs))
-
-    def post(self, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        form = self.form_class(self.request.POST)
-        product_id = self.kwargs.get('product_id')
-        context['form'] = form
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
+            product_id = kwargs.get('product_id')
             product_loan = get_object_or_404(ProductLoan, product_id=product_id, duration=instance.duration)
-            if not LoanOrder.objects.filter(user=self.request.user, complete=False).exists():
-                LoanOrder.objects.get_or_create(user=self.request.user, product_loan=product_loan, complete=False)
-                messages.success(self.request, "order has been sent successfully")
-                return redirect(self.success_url)
+            if not LoanOrder.objects.filter(user=request.user, complete=False).exists():
+                loan_order = LoanOrder.objects.create(user=request.user, product_loan=product_loan, complete=False)
+                messages.success(request, "Order has been sent successfully")
+                return redirect('rider:product-loan-checkout', pk=loan_order.pk)
             else:
-                messages.info(self.request, "sorry, you have an existing product loan")
-        return render(self.request, self.template_name, self.get_context_data(**kwargs))
+                messages.info(request, "Sorry, you have an existing product loan")
+        else:
+            messages.error(request, "Failed to send order")
+        return redirect('rider:product-loan-checkout', kwargs={'pk': ProductLoan.pk})
 
 
 class ProductLoanOrderListView(CartMixin, ListView):
@@ -290,7 +332,14 @@ class ProductLoanCheckoutView(CartMixin, SuccessMessageMixin, CreateView):
         instance.order = loan_order
         instance.type = "DP"
         instance.amount = loan_order.product_loan.get_deposit()
+        instance.save()
+        if loan_order.product_loan.installment_count() == loan_order.product_loan.duration:
+
+            loan_order.complete = True
+            loan_order.save()
+            messages.success(self.request, "Loan order has been completed successfully")
         return super().form_valid(form)
+
 
 
 class ProductLoanPaymentListView(CartMixin, ListView):
@@ -434,6 +483,20 @@ class LoanOrderDeliveryDetailView(View):
         return render(self.request, self.template_name, {"order_delivery": order_delivery})
 
 
+# class SavingsWithdrawalCreateView(SuccessMessageMixin, UserFormKwargsMixin, CreateView):
+#     template_name = "rider/savings-withdrawal.html"
+#     form_class = SavingsWithdrawalModelForm
+#     model = SavingsWithdrawal
+#     success_message = "You've withdrawn successfully"
+#     success_url = reverse_lazy("rider:index")
+
+#     def form_valid(self, form):
+#         instance = form.save(commit=False)
+#         instance.user = self.request.user
+#         return super().form_valid(form)
+
+
+
 class SavingsWithdrawalCreateView(SuccessMessageMixin, UserFormKwargsMixin, CreateView):
     template_name = "rider/savings-withdrawal.html"
     form_class = SavingsWithdrawalModelForm
@@ -442,9 +505,16 @@ class SavingsWithdrawalCreateView(SuccessMessageMixin, UserFormKwargsMixin, Crea
     success_url = reverse_lazy("rider:index")
 
     def form_valid(self, form):
+        withdrawal_amount = form.cleaned_data['amount']
+        loan_application = LoanAccount.objects.filter(user=self.request.user).first()
+        if loan_application is not None:
+            loan_application.amount -= withdrawal_amount
+            loan_application.save()
         instance = form.save(commit=False)
         instance.user = self.request.user
-        return super().form_valid(form)
+        instance.save()
+        return redirect(self.success_url)
+
 
 
 class FeedbackCreateView(CartMixin, SuccessMessageMixin, CreateView):

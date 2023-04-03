@@ -3,7 +3,7 @@ from django.contrib.admin import ModelAdmin
 
 from accounts.mixins import ExportCsvMixin
 from stock.forms import CategoryModelForm, ProductModelForm, ProductLoanModelForm
-from stock.models import Category, Product, ProductLoan
+from stock.models import Category, Product, ProductLoan, LoanOrder
 
 
 @admin.register(Category)
@@ -72,3 +72,20 @@ class ProductLoanAdmin(ExportCsvMixin, ModelAdmin):
     def has_change_permission(request, obj=None):
         return True
 
+
+
+@admin.register(LoanOrder)
+class ProductLoanAdmin(ExportCsvMixin, ModelAdmin):
+    search_fields = ['user']
+    list_display = ['transaction_id', 'product_loan']
+   
+from stock.models import LoanOrderInstallments
+
+
+@admin.register(LoanOrderInstallments)
+class LoanOrderInstallmentsAdmin(ExportCsvMixin, ModelAdmin):
+    search_fields = ['user']
+    list_display = ['transaction_id', 'type', 'confirm']
+   
+    def transaction_id(self, obj):
+        return obj.order.transaction_id

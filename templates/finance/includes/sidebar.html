@@ -9,19 +9,55 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link {% if not request.path == "/finance/loan-list/" %}collapsed{% endif %}" href="{% url 'finance:loan-list' %}">
-          <i class="bi bi-credit-card-fill"></i>
-          <span>Loan Application List</span>
-        </a>
-      </li><!-- End F.A.Q Page Nav -->
+      
 
-      <li class="nav-item">
-        <a class="nav-link {% if not request.path == "/finance/loan-order-payment-list/" %}collapsed{% endif %}" href="{% url 'finance:loan-order-payment-list' %}">
-          <i class="bi bi-credit-card-fill"></i>
-          <span>Pending Product Loan Payments</span>
-        </a>
-      </li><!-- End F.A.Q Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {% if not request.path == "/finance/pending-savings/" %}collapsed{% endif %}" href="{% url 'finance:pending-savings-list' %}">
+                <i class="bi bi-currency-exchange"></i>
+                <span>Pending Savings List</span>
+            </a>
+        </li><!-- End Pending Savings List Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {% if not request.path == "/finance/approved-savings/" %}collapsed{% endif %}" href="{% url 'finance:approved-savings-list' %}">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Approved Savings List</span>
+            </a>
+        </li><!-- End Approved Savings List Page Nav -->
+
+
+
+       <li class="nav-item">
+            <a class="nav-link {% if not request.path == "/finance/account-total/" %}collapsed{% endif %}" href="{% url 'finance:account-total' %}">
+                <i class="bi bi-wallet2"></i>
+                <span>Account Total</span>
+            </a>
+        </li>
+
+      <!--     <li class="nav-item">
+            <a class="#">
+                <i class="bi bi-wallet2"></i>
+                <span>Account Total</span>
+            </a>
+        </li><!-- End Account Total Page Nav -->
+
+
+        <li class="nav-item">
+            <a class="nav-link {% if not request.path == "/finance/loan-list/" %}collapsed{% endif %}" href="{% url 'finance:loan-list' %}">
+                <i class="bi bi-credit-card-2-back-fill"></i>
+                <span>Loan Application List</span>
+            </a>
+        </li><!-- End Loan Application List Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {% if not request.path == "/finance/loan-order-payment-list/" %}collapsed{% endif %}" href="{% url 'finance:loan-order-payment-list' %}">
+                <i class="bi bi-cash-coin"></i>
+                <span>Pending Product Loan Payments</span>
+            </a>
+        </li><!-- End Pending Product Loan Payments Page Nav -->
+
+
 
       <li class="nav-item">
         <a class="nav-link {% if not request.path == "/finance/approved-loan-order-payment-list/" %}collapsed{% endif %}"

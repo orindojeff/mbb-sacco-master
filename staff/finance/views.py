@@ -6,13 +6,15 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
-
+from loan.models import Saving
 from accounts.forms import UserModelForm, ProfileModelForm, StaffFeedbackModelForm
 from accounts.mixins import ProfileMixin
 from accounts.models import FAQ, Profile, Feedback, DialogsModel
 from client.helpers import create_dialog_
-from loan.models import LoanRepaymentTransaction, LoanApplication
+from loan.models import LoanRepaymentTransaction, LoanApplication, LoanAccount
 from stock.models import OrderPayment, LoanOrderInstallments
+from django.http import Http404
+
 
 
 class DashboardView(TemplateView):
@@ -169,9 +171,116 @@ class LoanApplicationListView(ListView):
         return LoanApplication.objects.all().order_by("-created")
 
 
+# def confirm_loan(request, pk):
+#     loan = get_object_or_404(LoanApplication, pk=pk)
+#     loan.status = "AP"
+#     loan.save()
+#     messages.success(request, "Loan has been approved successfully")
+#     return redirect("finance:loan-list")
+
+
+
+# def confirm_loan(request, pk):
+#     loan = get_object_or_404(LoanApplication, pk=pk)
+#     if loan.status != "AP":
+#         loan.status = "AP"
+#         loan.save()
+#         try:
+#             loan_account = LoanAccount.objects.get(user=loan.user)
+#             loan_account.amount += loan.amount
+#             loan_account.save()
+#         except LoanAccount.DoesNotExist:
+#             loan_account = LoanAccount.objects.create(user=loan.user, amount=loan.amount)
+#         messages.success(request, "Loan has been approved successfully")
+#     else:
+#         messages.warning(request, "Loan is already approved")
+#     return redirect("finance:loan-list")
+
+from decimal import Decimal
+
 def confirm_loan(request, pk):
     loan = get_object_or_404(LoanApplication, pk=pk)
-    loan.status = "AP"
-    loan.save()
-    messages.success(request, "Loan has been approved successfully")
+    if loan.status != "AP":
+        # Check if loan amount is less than account amount
+        account = Account.objects.filter(id=1).first()
+        if account and loan.amount <= account.amount:
+            loan.status = "AP"
+            loan.save()
+            try:
+                loan_account = LoanAccount.objects.get(user=loan.user)
+                loan_account.amount += loan.amount
+                loan_account.save()
+            except LoanAccount.DoesNotExist:
+                loan_account = LoanAccount.objects.create(user=loan.user, amount=loan.amount)
+            # Deduct loan amount from MBB Sacco Account
+            account.amount -= loan.amount
+            account.save()
+            messages.success(request, "Loan has been approved successfully")
+        else:
+            balance = account.amount if account else 0
+            messages.warning(request, f"Loan amount exceeds available funds in MBB Sacco Account. MBB Sacco Account balance is {balance}.")
+    else:
+        messages.warning(request, "Loan is already approved")
     return redirect("finance:loan-list")
+
+
+
+
+from django.shortcuts import redirect
+from django.http import Http404
+from django.db.models import F
+from loan.models import Account
+
+from djmoney.money import Money
+
+class PendingSavingsListView(ListView):
+    model = Saving
+    template_name = 'finance/pending_savings.html'
+    context_object_name = 'savings_list'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Saving.Status.PENDING)
+
+    def post(self, request, *args, **kwargs):
+        saving_id = request.POST.get('saving_id')
+        if saving_id is not None:
+            try:
+                saving = Saving.objects.get(id=saving_id)
+            except Saving.DoesNotExist:
+                print('Saving does not exist')
+                raise Http404('Saving not found')
+            saving.status = Saving.Status.APPROVED
+            saving.save()
+
+            # Get or create Account instance and increment its amount by the approved savings amount
+            account, created = Account.objects.get_or_create(id=1)
+            account.amount += saving.amount
+            account.save()
+
+        return redirect(request.path)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            context['saving_id'] = self.request.POST.get('saving_id')
+        return context
+
+from django.shortcuts import render
+from loan.models import Account
+
+
+
+def account_total_view(request):
+    account = Account.objects.get(id=1)  # Assuming the account ID is always 1
+    context = {'account': account}
+    return render(request, 'finance/account_total.html', context)
+
+
+
+class ApprovedSavingsListView(ListView):
+    model = Saving
+    template_name = 'finance/approved_savings.html'
+    context_object_name = 'savings_list'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Saving.Status.APPROVED)

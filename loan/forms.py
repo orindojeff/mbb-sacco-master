@@ -1,5 +1,5 @@
 import re
-
+from .models import LoanAccount
 from braces.forms import UserKwargModelFormMixin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
@@ -59,27 +59,44 @@ class SavingTransactionModelForm(ModelForm):
         return mpesa.upper()
 
 
-class LoanRepaymentTransactionModelForm(UserKwargModelFormMixin, ModelForm):
+# class LoanRepaymentTransactionModelForm(UserKwargModelFormMixin, ModelForm):
+#     repayment = ModelChoiceField(queryset=LoanRepayment.objects.filter(paid=False),
+#                                  empty_label="Select Loan Installment")
+
+#     def __init__(self, *args, **kwargs):
+#         super(LoanRepaymentTransactionModelForm, self).__init__(*args, **kwargs)
+#         self.fields["repayment"].queryset = self.fields["repayment"].queryset.filter(loan__user=self.user)
+
+#     class Meta:
+#         model = LoanRepaymentTransaction
+#         fields = ['repayment', 'mpesa_code']
+
+#     def clean_mpesa_code(self):
+#         mpesa = self.cleaned_data.get('mpesa_code')
+#         pattern = re.compile(r"^[A-Za-z][a-zA-Z0-9]{9}")
+#         if not pattern.match(mpesa):
+#             raise ValidationError("Enter a valid Mpesa Code")
+#         if LoanOrderInstallments.objects.filter(mpesa_code=mpesa).exists() or \
+#                 OrderPayment.objects.filter(mpesa_code=mpesa).exists() or \
+#                 LoanRepaymentTransaction.objects.filter(mpesa_code=mpesa).exists() or \
+#                 SavingTransaction.objects.filter(mpesa_code=mpesa).exists():
+#             raise ValidationError("Mpesa Code already used.")
+#         return mpesa.upper()
+
+
+class LoanRepaymentTransactionModelForm(ModelForm):
     repayment = ModelChoiceField(queryset=LoanRepayment.objects.filter(paid=False),
                                  empty_label="Select Loan Installment")
 
-    def __init__(self, *args, **kwargs):
-        super(LoanRepaymentTransactionModelForm, self).__init__(*args, **kwargs)
-        self.fields["repayment"].queryset = self.fields["repayment"].queryset.filter(loan__user=self.user)
-
     class Meta:
         model = LoanRepaymentTransaction
-        fields = ['repayment', 'mpesa_code']
+        fields = ['repayment', 'amount', 'mpesa_code']
 
     def clean_mpesa_code(self):
         mpesa = self.cleaned_data.get('mpesa_code')
-        pattern = re.compile(r"^[A-Za-z][a-zA-Z0-9]{9}")
-        if not pattern.match(mpesa):
-            raise ValidationError("Enter a valid Mpesa Code")
-        if LoanOrderInstallments.objects.filter(mpesa_code=mpesa).exists() or \
-                OrderPayment.objects.filter(mpesa_code=mpesa).exists() or \
-                LoanRepaymentTransaction.objects.filter(mpesa_code=mpesa).exists() or \
-                SavingTransaction.objects.filter(mpesa_code=mpesa).exists():
+        if not len(mpesa) == 10:
+            raise ValidationError("Invalid Mpesa Code.")
+        elif LoanRepaymentTransaction.objects.filter(mpesa_code=mpesa).exists():
             raise ValidationError("Mpesa Code already used.")
         return mpesa.upper()
 
@@ -91,7 +108,7 @@ class SavingsWithdrawalModelForm(UserKwargModelFormMixin, ModelForm):
 
     def clean_amount(self):
         amount = self.cleaned_data.get('amount')
-        saving = Saving.objects.filter(user=self.user).first()
+        saving = LoanAccount.objects.filter(user=self.user).first()
         if amount.amount < 1:
             raise ValidationError("Amount has to be greater than 0")
         if amount > saving.amount:
