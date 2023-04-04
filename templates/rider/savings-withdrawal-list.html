@@ -1,0 +1,21 @@
+{% extends 'rider/layouts/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4"> Withdrawal History</h1>
+  <div class="row">
+    {% for withdrawal in withdrawals %}
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Withdrawal {{ withdrawal.id }}</h5>
+          <p class="card-text">Amount: {{ withdrawal.amount }}</p>
+          <p class="card-text">Date: {{ withdrawal.created }}</p>
+          <a href="{% url 'rider:savings-withdrawal-pdf' withdrawal.id %}" class="btn btn-primary">Download Receipt</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -14,8 +14,10 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>Outstanding Amount</small></th>
                 <th scope="col"><small>status</small></th>
+                <th scope="col"><small>Date Applied</small></th>
+                <th scope="col"><small>Due Date</small></th>
                 <th scope="col"><small>type</small></th>
               </tr>
             </thead>
@@ -25,6 +27,9 @@
                 <th scope="row">{{ forloop.counter }}</th>
                 <td><small>{{ loan.amount }}</small></td>
                 <td><small>{{ loan.get_status_display }}</small></td>
+                <td><small>{{ loan.created }}</small></td>
+                <td><small>{{ loan.get_due_date }}</small></td>
+
                   <td>
                       <small>{{ loan.get_type_display }}</small>
                   </td>

@@ -15,24 +15,35 @@ class CartMixin:
         return context
 
 
-class GeneratePdfMixin:
-    pdf_template = None
-    pdf_data = None  # Model data
-    pdf_name = None
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.views.generic import View
+
+
+class GeneratePdfMixin(View):
+    pdf_name = 'document'
 
     def get_pdf_data(self):
-        return self.pdf_data
+        raise NotImplementedError
 
     def get_pdf_name(self):
-        return self.pdf_name
+        return f"{self.pdf_name}.pdf"
 
-    def generate_pdf(self):
-        """Generate pdf."""
-        # Rendered
-        html_string = render_to_string(self.pdf_template, self.get_pdf_data())
-        html = HTML(string=html_string)
-        result = html.write_pdf()
-        # Creating http response
-        response = HttpResponse(result, content_type='application/pdf;')
-        response['Content-Disposition'] = f"inline; filename={self.get_pdf_name()}.pdf "
+    def get(self, request, *args, **kwargs):
+        pdf_data = self.get_pdf_data().get('pdf')
+        pdf_name = self.get_pdf_name()
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{pdf_name}"'
+
+        pdf_file = BytesIO(pdf_data)
+        response.write(pdf_file.getvalue())
+        pdf_file.close()
+
         return response

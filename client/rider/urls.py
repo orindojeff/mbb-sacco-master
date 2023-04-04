@@ -7,7 +7,8 @@ from client.rider.views import DashboardView, AppliedLoanListView, FAQListView, 
     ProductLoanPaymentListView, SearchView, ProductDetailView, PayProductLoanView, PickUpStationView, pick_order, \
     pick_loan_order, PickUpStationUpdateView, SelectedPickUpStationListView, OrderDeliveryListView, \
     LoanOrderDeliveryListView, select_pickup_station, OrderDeliveryDetailView, SavingsWithdrawalCreateView, \
-    FeedbackCreateView, confirm_order_picked
+    FeedbackCreateView, confirm_order_picked, SavingsWithdrawalListView, SavingsWithdrawalPdfView, LoanRepaymentPdfView,\
+    LoanRepaymentPdfView, OrderPdfView
 
 app_name = "rider"
 
@@ -37,7 +38,7 @@ urlpatterns = [
     path('faq-list/', FAQListView.as_view(), name="faq-list"),
     path('product-list/', ProductListView.as_view(), name="product-list"),
     path('order-payment-list/', OrderPaymentListView.as_view(), name="order-payment-list"),
-    path('order-list/', OrderListView.as_view(), name="order-list"),
+    path('order-list/', OrderListView, name="order-list"),
     path('loan-repayment-list/', LoanRepaymentListView.as_view(), name="loan-repayment-list"),
     path('loan-repayment/', LoanRepaymentView.as_view(), name="loan-repayment"),
     path('apply-loan/', LoanApplyView.as_view(), name="apply-loan"),
@@ -51,4 +52,14 @@ urlpatterns = [
     path('order-delivery-list/', OrderDeliveryListView.as_view(), name="order-delivery-list"),
     path('loan-order-delivery-list/', LoanOrderDeliveryListView.as_view(), name="loan-order-delivery-list"),
     path('', DashboardView.as_view(), name="index"),
+    path('savings-withdrawals/', SavingsWithdrawalListView.as_view(), name='savings-withdrawal-list'),
+    # other URL patterns
+
+    # receipts
+    path('savings-withdrawals/', SavingsWithdrawalListView.as_view(), name='savings-withdrawal-list'),
+    path('withdrawals/<int:pk>/pdf/', SavingsWithdrawalPdfView.as_view(), name='savings-withdrawal-pdf'), 
+    path('loan-repayment/<int:pk>/pdf/', LoanRepaymentPdfView.as_view(), name='loan-repayment-pdf'),
+    path('order/<int:order_id>/pdf/', OrderPdfView.as_view(), name='order-pdf'),
+
 ]
+

@@ -32,7 +32,9 @@ INSTALLED_APPS = [
     'loan',
     'staff',
     'stock',
-    'delivery'
+    'delivery',
+    'supply',
+
 
 ]
 

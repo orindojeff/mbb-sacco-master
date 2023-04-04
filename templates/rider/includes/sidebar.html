@@ -9,12 +9,21 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link {% if not request.path == "/rider/savings-withdrawal/" %}collapsed{% endif %}" href="{% url 'rider:savings-withdrawal' %}">
-          <i class="bi bi-bank"></i>
-          <span>Withdraw loan</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+<li class="nav-item">
+    <a class="nav-link {% if not request.path == "/rider/savings-withdrawal/" %}collapsed{% endif %}" href="{% url 'rider:savings-withdrawal' %}">
+        <i class="bi bi-cash-stack"></i>
+        <span>Withdraw loan</span>
+    </a>
+</li><!-- End Dashboard Nav -->
+
+<li class="nav-item">
+    <a class="nav-link {% if not request.path == "/rider/savings-withdrawal-list/" %}collapsed{% endif %}" href="{% url 'rider:savings-withdrawal-list' %}">
+        <i class="bi bi-receipt"></i>
+        <span>Withdrawal Receipts</span>
+    </a>
+</li><!-- End Dashboard Nav -->
+
+      
 
       <li class="nav-item">
         <a class="nav-link {% if not request.path == "/rider/applied-loan-list/" %}collapsed{% endif %}" href="{% url 'rider:applied-loan-list' %}">
@@ -47,7 +56,7 @@
       <li class="nav-item">
         <a class="nav-link {% if not request.path == "/rider/saving/" %}collapsed{% endif %}" href="{% url 'rider:saving' %}">
           <i class="bi bi-bank2"></i>
-          <span>Make Shares Contribution</span>
+          <span>Make Contribution</span>
         </a>
       </li><!-- End Dashboard Nav -->
 

@@ -39,6 +39,12 @@ class SavingTransaction(TimeStampModel):
     confirmed = models.BooleanField(default=False)
 
 
+from datetime import date
+from datetime import timedelta
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+
 class LoanApplication(TimeStampModel):
     class Status(models.TextChoices):
         PENDING = 'PG', _('Pending')
@@ -56,6 +62,22 @@ class LoanApplication(TimeStampModel):
     purpose = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.PENDING)
     type = models.CharField(max_length=2, choices=LoanType.choices, default=LoanType.MONTHLY)
+
+
+
+    def get_due_date(self):
+        if self.type == self.LoanType.MONTHLY:
+            return self.created + relativedelta(months=+1)
+        elif self.type == self.LoanType.THREE_MONTHS:
+            return self.created + relativedelta(months=+3)
+        elif self.type == self.LoanType.HALF_YEAR:
+            return self.created + relativedelta(months=+6)
+        elif self.type == self.LoanType.YEARLY:
+            return self.created + relativedelta(years=+1)
+        else:
+            return None
+
+timedelta(days=365)
 
 class LoanAccount(TimeStampModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -5,38 +5,57 @@
   <div class="row">
     <div class="col-12">
 
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Loan Repayment List</h5>
-            <div class="table-responsive">
-         <table class="table table-sm">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col"><small>Amount</small></th>
-                <th scope="col"><small>mpesa</small></th>
-                <th scope="col"><small>status</small></th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for loan in loan_repayment_list %}
-              <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td><small>{{ loan.amount }}</small></td>
-                <td><small>{{ loan.mpesa_code }}</small></td>
-                  <td>
-                      <small>{% if loan.confirmed %} Confirmed {% else %} Pending {% endif %}</small>
-                  </td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-            </div>
-          <!-- End Default Table Example -->
+
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Loan Repayment List</h5>
+        <div class="table-responsive">
+    <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col"><small>Amount</small></th>
+      <th scope="col"><small>mpesa</small></th>
+      <th scope="col"><small>status</small></th>
+      <th scope="col"><small>Download Receipt</small></th>  <!-- new column -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for loan in loan_repayment_list %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><small>{{ loan.amount }}</small></td>
+        <td><small>{{ loan.mpesa_code }}</small></td>
+        <td>
+          <small>{% if loan.confirmed %} Confirmed {% else %} Pending {% endif %}</small>
+        </td>
+        <td>
+          {% if loan.confirmed %}
+            <a href="{% url 'rider:loan-repayment-pdf' loan.pk %}" class="btn btn-primary">Download</a>
+          {% else %}
+            <!-- display nothing for pending loans -->
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
         </div>
+
+      <!-- End Default Table Example -->
+      <div style="padding: 15px;">
+        <p style="color: blue;">Your outstanding loan balance is: {{ remaining_loan_balance }}</p>
       </div>
+      
     </div>
   </div>
+</div>
+
+  </div>
+ 
 </section>
 {% include "sales/includes/product-details.html" %}
 {% endblock %}
+

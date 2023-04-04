@@ -101,36 +101,9 @@ class LoanRepaymentView(CartMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
-# from django.contrib.messages.views import SuccessMessageMixin
-# from django.urls import reverse_lazy
-# from django.views.generic import CreateView
 
 
-# class LoanRepaymentView(CartMixin, SuccessMessageMixin, UserFormKwargsMixin, CreateView):
-#     template_name = 'rider/loan-repayment.html'
-#     form_class = LoanRepaymentTransactionModelForm
-#     success_url = reverse_lazy('loan_repayment_success')
-#     success_message = 'Loan repayment transaction has been submitted successfully'
-
-#     def get_form_kwargs(self):
-#         kwargs = super().get_form_kwargs()
-#         kwargs['user'] = self.request.user # pass the user to the form
-#         repayment_id = self.request.GET.get('repayment_id')
-#         if repayment_id:
-#             repayment = LoanRepayment.objects.get(id=repayment_id)
-#             kwargs['instance'] = LoanRepaymentTransaction(repayment=repayment)
-#         return kwargs
-
-#     def form_valid(self, form):
-#         transaction = form.save()
-#         repayment = transaction.repayment
-#         # Update LoanRepayment's min_repayment field with the calculated minimum repayment
-#         repayment.min_repayment = repayment.calculate_min_repayment()
-#         repayment.save()
-#         return super().form_valid(form)
-
-
-
+from django.db.models import Sum
 
 
 
@@ -142,14 +115,55 @@ class LoanRepaymentListView(CartMixin, ListView):
         queryset = LoanRepaymentTransaction.objects.filter(repayment__loan__user=self.request.user)
         return queryset
 
+    def get_remaining_loan_balance(self):
+        loan = LoanApplication.objects.filter(user=self.request.user, status=LoanApplication.Status.APPROVED).first()
+        if loan:
+            return loan.amount
+        return None
 
-class OrderListView(CartMixin, ListView):
-    template_name = "rider/order-list.html"
-    context_object_name = "order_list"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['remaining_loan_balance'] = self.get_remaining_loan_balance()
+        context['repayment_ids'] = [repayment.pk for repayment in self.object_list]
+        return context
 
-    def get_queryset(self):
-        queryset = Order.objects.filter(user=self.request.user)
-        return queryset
+
+
+# class OrderListView(CartMixin, ListView):
+#     template_name = "rider/order-list.html"
+#     context_object_name = "order_list"
+
+#     def get_queryset(self):
+#         if self.request.user.is_authenticated:
+#             queryset = Order.objects.filter(user=self.request.user)
+#         else:
+#             queryset = Order.objects.none()
+#         return queryset
+
+
+
+
+
+def OrderListView(request):
+    user = request.user
+    orders = Order.objects.filter(user=user, complete=True)
+    order_list = []
+    for order in orders:
+        order_info = {
+            'transaction_id': order.transaction_id,
+            'username': order.user.username,
+            'quantity': order.get_total_items(),
+            'total_cost': order.get_total_amount(),
+            'payment_status': 'Paid' if order.complete else 'Unpaid',
+            'date_ordered': order.created,
+            'order_id': order.id,  # Change cart_id to order_id
+        }
+        order_list.append(order_info)
+    return render(request, 'rider/order-list.html', {'order_list': order_list})
+
+
+from stock.models import Order
+
 
 
 class OrderPaymentListView(CartMixin, ListView):
@@ -516,6 +530,111 @@ class SavingsWithdrawalCreateView(SuccessMessageMixin, UserFormKwargsMixin, Crea
         return redirect(self.success_url)
 
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class SavingsWithdrawalListView(LoginRequiredMixin, ListView):
+    model = SavingsWithdrawal
+    template_name = 'rider/savings-withdrawal-list.html'
+    context_object_name = 'withdrawals'
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        if self.request.user.is_authenticated:
+            queryset = queryset.filter(user=self.request.user)
+        return queryset
+
+
+# receipts
+
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.views.generic import DetailView
+from stock.mixins import GeneratePdfMixin
+
+
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+
+
+class SavingsWithdrawalPdfView(LoginRequiredMixin, ListView):
+    model = SavingsWithdrawal
+    template_name = 'receipts/savings-withdrawal-receipt.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        if self.request.user.is_authenticated:
+            queryset = queryset.filter(user=self.request.user)
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        withdrawal = self.model.objects.get(pk=self.kwargs['pk'])
+        template_path = self.template_name
+        context = {'withdrawal': withdrawal}
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{withdrawal.pk}.pdf"'
+        template = get_template(template_path)
+        html = template.render(context)
+        pisa_status = pisa.CreatePDF(html, dest=response)
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+
+
+class LoanRepaymentPdfView(LoginRequiredMixin, View):
+    template_name = 'receipts/loan-repayment-receipt.html'
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        repayment = get_object_or_404(LoanRepaymentTransaction, pk=pk, repayment__loan__user=request.user)
+        template_path = self.template_name
+        context = {'repayment': repayment}
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{repayment.pk}.pdf"'
+        template = get_template(template_path)
+        html = template.render(context)
+        pisa_status = pisa.CreatePDF(html, dest=response)
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+
+
+# def generate_order_pdf(request, order_id):
+#     order = Order.objects.get(id=order_id)
+#     template_path = 'receipts/order-receipt.html'
+#     context = {'order': order}
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="{order.transaction_id}.pdf"'
+#     template = get_template(template_path)
+#     html = template.render(context)
+#     pisa_status = pisa.CreatePDF(html, dest=response)
+#     if pisa_status.err:
+#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
+#     return response
+
+
+
+
+class OrderPdfView(View):
+    def get(self, request, *args, **kwargs):
+        order_id = kwargs['order_id']
+        order = Order.objects.get(id=order_id)
+        template_path = 'receipts/order-receipt.html'
+        context = {'order': order}
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{order.transaction_id}.pdf"'
+        template = get_template(template_path)
+        html = template.render(context)
+        pisa_status = pisa.CreatePDF(html, dest=response)
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+
+
+
 
 class FeedbackCreateView(CartMixin, SuccessMessageMixin, CreateView):
     template_name = "rider/feedback.html"
@@ -541,3 +660,7 @@ def confirm_order_picked(request, pk):
     order.save()
     messages.success(request, "Order has been marked as picked successfully.")
     return redirect("rider:index")
+
+
+
+

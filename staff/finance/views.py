@@ -82,12 +82,39 @@ class ApprovedLoanOrderPaymentList(ListView):
         return queryset
 
 
+# def confirm_loan_repayment(request, pk):
+#     loan_repayment_obj = get_object_or_404(LoanRepaymentTransaction, pk=pk)
+#     loan_repayment_obj.confirmed = True
+#     loan_repayment_obj.save()
+#     messages.success(request, "Payment has been approved successfully")
+#     return redirect('finance:loan-repayment-list')
+
+from django.shortcuts import get_object_or_404, redirect
+
+
+from decimal import Decimal
+from django.db.models import F
+
+
 def confirm_loan_repayment(request, pk):
     loan_repayment_obj = get_object_or_404(LoanRepaymentTransaction, pk=pk)
     loan_repayment_obj.confirmed = True
     loan_repayment_obj.save()
+    
+    # Update LoanApplication amount
+    loan_application = loan_repayment_obj.repayment.loan
+    loan_application.amount -= loan_repayment_obj.amount
+    loan_application.save()
+
+    # Increment Account with id=1 by the amount confirmed
+    account = Account.objects.get(id=1)
+    account.amount += loan_repayment_obj.amount
+    account.save()
+
     messages.success(request, "Payment has been approved successfully")
     return redirect('finance:loan-repayment-list')
+
+
 
 
 def confirm_order_payment(request, pk):

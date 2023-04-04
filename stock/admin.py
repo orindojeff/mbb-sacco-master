@@ -3,7 +3,7 @@ from django.contrib.admin import ModelAdmin
 
 from accounts.mixins import ExportCsvMixin
 from stock.forms import CategoryModelForm, ProductModelForm, ProductLoanModelForm
-from stock.models import Category, Product, ProductLoan, LoanOrder
+from stock.models import Category, Product, ProductLoan, LoanOrder, Order
 
 
 @admin.register(Category)
@@ -78,6 +78,12 @@ class ProductLoanAdmin(ExportCsvMixin, ModelAdmin):
 class ProductLoanAdmin(ExportCsvMixin, ModelAdmin):
     search_fields = ['user']
     list_display = ['transaction_id', 'product_loan']
+
+
+@admin.register(Order)
+class OrderAdmin(ExportCsvMixin, ModelAdmin):
+    search_fields = ['user']
+    list_display = ['user', 'transaction_id', 'complete']
    
 from stock.models import LoanOrderInstallments
 

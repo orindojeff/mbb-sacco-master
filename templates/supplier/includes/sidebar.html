@@ -1,0 +1,79 @@
+<aside id="sidebar" class="sidebar">
+
+<style type="text/css">
+  ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+</style>
+
+    <ul class="sidebar-menu">
+      
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/index/" %}collapsed{% endif %}" href="{% url 'supplier:index' %}">
+          <i class="bi bi-house"></i> Dashboard
+        </a>
+      </li><br>
+
+
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/supplier_pending_tender/" %}collapsed{% endif %}" href="{% url 'supplier:supplier_pending_tenders' %}">
+          <i class="bi bi-stopwatch"></i> Pending Tenders
+        </a>
+      </li><br>
+
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/approved-supplier-tenders/" %}collapsed{% endif %}" href="{% url 'supplier:approved-supplier-tenders' %}">
+          <i class="bi bi-truck"></i> Approved Tenders
+        </a>
+      </li><br>
+
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/supplied-tenders/" %}collapsed{% endif %}" href="{% url 'supplier:suplied-tenders' %}">
+          <i class="bi bi-check-all"></i> Supplied Tenders
+        </a>
+      </li><br>
+
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/supplier-confirm-tender-payments/" %}collapsed{% endif %}" href="{% url 'supplier:supplier-confirm-tender-payments' %}">
+          <i class="bi bi-check-circle"></i> Confirm Tender Payments
+        </a>
+      </li><br>
+
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/rejected-supply-tenders/" %}collapsed{% endif %}" href="{% url 'supplier:rejected-supply-tenders' %}">
+          <i class="bi bi-x-circle"></i> Rejected Tenders
+        </a>
+      </li><br>
+
+      <li class="menu-item">
+         <a class="nav-link {% if not request.path == "/supplier/supplier:complete-supply-tenders/" %}collapsed{% endif %}" href="{% url 'supplier:complete-supply-tenders' %}">
+          <i class="bi bi-check-circle"></i> Complete Tenders
+        </a>
+      </li>
+
+      <!-- <li class="menu-item">
+        <a href="#">
+          <i class="bi bi-geo-alt"></i> Supplier Payment
+        </a>
+      </li><br>
+
+      <li class="menu-item">
+        <a href="#">
+          <i class="bi bi-file-earmark-text"></i> Supplier Invoices
+        </a>
+      </li><br>
+      -->
+
+      <hr>
+
+      <li class="menu-item">
+        <a href="#">
+          <i class="bi bi-question-circle"></i> F.A.Q/Help
+        </a>
+      </li><br>
+
+    </ul>
+  </aside><!-- End Sidebar-->

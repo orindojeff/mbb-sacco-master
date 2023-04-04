@@ -51,6 +51,34 @@
           <span>Loan Orders List</span>
         </a>
       </li><!-- End Profile Page Nav -->
+
+
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/tender-request/" %}collapsed{% endif %}" href="{% url 'supplier:tender-request' %}">
+        
+          <i class="bi bi-pencil"></i>Add supply Tender
+        </a>
+      </li>
+
+      <li class="menu-item">
+        <a class="nav-link {% if not request.path == "/supplier/pending_approval_tenders/" %}collapsed{% endif %}" href="{% url 'supplier:pending_approval_tenders' %}">
+        
+          <i class="bi bi-hourglass-split"></i>Pending Approval Tenders
+        </a>
+      </li>
+
+      <li class="menu-item">
+         <a class="nav-link {% if not request.path == "/supplier/confirm-tenders/" %}collapsed{% endif %}" href="{% url 'supplier:confirm-tenders' %}">
+          <i class="bi bi-check2-circle"></i>Confirm Supplies
+        </a>
+      </li>
+
+      <li class="menu-item">
+         <a class="nav-link {% if not request.path == "/supplier/confirmed-inventory-tenders/" %}collapsed{% endif %}" href="{% url 'supplier:confirmed-inventory-tenders' %}">
+          <i class="bi bi-check2-all"></i>Completed Supplies
+        </a>
+      </li>
+
         <li class="nav-item">
         <a class="nav-link {% if not request.path == "/sales/feedback/" %}collapsed{% endif %}" href="{% url 'sales:feedback' %}">
           <i class="bi bi-question-circle"></i>

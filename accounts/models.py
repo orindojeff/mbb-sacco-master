@@ -15,6 +15,7 @@ class User(AbstractUser):
         SALES_MANAGER = 'SM', _('Sales')
         RIDER = 'RD', _('Rider')
         CUSTOMER = 'CM', _('Customer')
+        SUPPLIER = 'SP', _('Supplier')
 
     type = models.CharField(max_length=2, choices=UserTypes.choices, default=UserTypes.CUSTOMER)
     name = models.CharField(max_length=250)
