@@ -13,6 +13,7 @@
           <table class="table table-sm">
             <thead>
               <tr>
+                <th scope="col"><small>Customer</small></th>
                 <th scope="col"><small>Mpesa</small></th>
                 <th scope="col"><small>Amount</small></th>
                 <th scope="col"><small>Action</small></th>
@@ -21,6 +22,7 @@
             <tbody>
             {% for order in loan_order_payment_list %}
               <tr>
+                <td><small>{{ order.order.user.name }}</small></td>
                 <td><small>{{ order.mpesa_code }}</small></td>
                 <td><small>{{ order.amount }}</small></td>
                 <td>

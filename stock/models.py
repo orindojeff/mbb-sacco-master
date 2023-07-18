@@ -166,6 +166,7 @@ class LoanOrderInstallments(OrderPaymentAbstract):
 
     order = models.ForeignKey(LoanOrder, on_delete=models.CASCADE, related_name="loan_order_installments")
     type = models.CharField(max_length=2, choices=InstallmentType.choices, default=InstallmentType.DEPOSIT)
+    
 
 
 class OrderPayment(OrderPaymentAbstract):

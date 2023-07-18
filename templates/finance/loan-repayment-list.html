@@ -13,6 +13,7 @@
           <table class="table table-sm">
             <thead>
               <tr>
+                <th scope="col"><small>Applicant</small></th>
                 <th scope="col"><small>Mpesa</small></th>
                 <th scope="col"><small>Amount</small></th>
                 <th scope="col"><small>Action</small></th>
@@ -21,6 +22,7 @@
             <tbody>
             {% for loan in loan_repayment_list %}
               <tr>
+                <td><small>{{ loan.repayment.loan.user.name }}</small></td>
                 <td><small>{{ loan.mpesa_code }}</small></td>
                 <td><small>{{ loan.amount }}</small></td>
                 <td>
