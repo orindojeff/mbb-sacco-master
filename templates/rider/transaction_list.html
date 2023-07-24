@@ -1,0 +1,47 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %}Saving Transactions List{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Saving Transactions List</h5>
+
+                    <!-- Default Table -->
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"><small>Amount</small></th>
+                            <th scope="col"><small>Mpesa Code</small></th>
+                            <th scope="col"><small>Date</small></th>
+                            <th scope="col"><small>Action</small></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td><small>{{ transaction.amount }}</small></td>
+                            <td><small>{{ transaction.mpesa_code }}</small></td>
+                            <td><small>{{ transaction.created }}</small></td>
+                            <td>
+                                <a href="{% url 'rider:generate-receipt' transaction.id %}" class="btn btn-primary">
+                                    Download Receipt
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- End Default Table Example -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

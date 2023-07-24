@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Migori Boda Boda Sacco</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .receipt-container {
+            border: 2px solid #000;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex; /* Use Flexbox for a two-column layout */
+            flex-wrap: wrap; /* Allow content to wrap into the next row */
+            justify-content: space-between; /* Space columns evenly */
+        }
+
+        .receipt-column {
+            width: 48%; /* Adjust the column width as needed */
+        }
+
+        .receipt-header h2 {
+            margin: 0;
+            font-size: 28px; /* Increased font size for the header */
+        }
+
+        .sacco-logo {
+            /* Add your Sacco logo URL here */
+            /* Example: url('path/to/sacco_logo.png') */
+            display: block;
+            width: 150px; /* Adjust the width as needed */
+            margin: 0 auto 10px;
+        }
+
+        .sacco-info {
+            text-align: center;
+            font-size: 18px; /* Increased font size for Sacco info */
+            margin-bottom: 10px;
+        }
+
+        .receipt-details {
+            margin-bottom: 10px;
+        }
+
+        .receipt-details p {
+            margin: 8px 0; /* Increased margin for better spacing */
+            font-size: 16px; /* Increased font size for transaction details */
+        }
+
+        .receipt-total {
+            text-align: right;
+            width: 100%; /* Make the total section full width */
+            margin-top: 20px;
+        }
+
+        .receipt-total p {
+            font-weight: bold;
+            margin: 8px 0; /* Increased margin for better spacing */
+            font-size: 20px; /* Increased font size for the total */
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="receipt-column">
+            <div class="receipt-header">
+                <img class="sacco-logo" src="path/to/sacco_logo.png" alt="Migori Boda Boda Sacco Logo">
+                <h2>Transaction Receipt</h2>
+            </div>
+            <div class="sacco-info">
+                <p>Migori Boda Boda Sacco</p>
+                <p>Contact: +254 123 456 789 | Email: info@migoribodasacco.com</p>
+                <!-- Add other Sacco information here as needed -->
+            </div>
+        </div>
+        <div class="receipt-column">
+            <div class="receipt-details">
+                <p><strong>Confirmed:</strong> {{ transaction.saving.user.username }}</p>
+                <p><strong>Date:</strong> {{ transaction.created }}</p>
+                <p><strong>Amount:</strong> {{ transaction.amount }}</p>
+                <p><strong>Mpesa Code:</strong> {{ transaction.mpesa_code }}</p>
+                <!-- Add other fields here as needed -->
+            </div>
+            <div class="receipt-total">
+                <p><strong>Total:</strong> {{ transaction.amount }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

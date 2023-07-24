@@ -70,19 +70,68 @@ class SavingView(CartMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
+from django.http import JsonResponse
+
+from django.urls import reverse_lazy
+
 class LoanApplyView(CartMixin, UserFormKwargsMixin, SuccessMessageMixin, CreateView):
     model = LoanApplication
     form_class = LoanApplicationModelForm
     template_name = "rider/loan-application.html"
-    success_url = reverse_lazy("rider:index")
-    success_message = "Your application has been sent successfully"
+    success_url = reverse_lazy("rider:loan-detail")  # This will be updated later
+    
 
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.user = self.request.user
         return super().form_valid(form)
 
+    def post(self, request, *args, **kwargs):
+        loan_type = request.POST.get('loan_type')
+        if loan_type:
+            amount = self.calculate_total_amount(loan_type)
+            return JsonResponse({'total_amount_to_repay': amount})
+        return super().post(request, *args, **kwargs)
 
+    def get_success_url(self):
+        # Get the loan object after it's saved
+        loan = self.object
+        return reverse_lazy("rider:loan-detail", kwargs={'pk': loan.pk})
+
+
+from django.views.generic import DetailView
+
+from django.shortcuts import redirect
+
+from django.contrib import messages
+from django.shortcuts import redirect
+
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+
+class LoanDetailView(DetailView):
+    model = LoanApplication
+    template_name = "rider/loan_detail.html"
+    context_object_name = "loan"
+
+    def post(self, request, *args, **kwargs):
+        loan = self.get_object()
+
+        # Change the is_complete field to True and save the object
+        loan.is_complete = True
+        loan.save()
+
+        # Add success message
+        messages.success(self.request, 'Your loan application is successfull.')
+
+        return redirect(reverse_lazy("rider:index"))
+
+
+
+
+
+    
 from decimal import Decimal
 
 
@@ -663,4 +712,49 @@ def confirm_order_picked(request, pk):
 
 
 
+
+from django.views.generic import ListView
+from loan.models import SavingTransaction
+
+class SavingTransactionListView(ListView):
+    model = SavingTransaction
+    template_name = 'rider/transaction_list.html'  # Replace 'transaction_list.html' with your actual template path
+    context_object_name = 'transactions'
+
+    
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from io import BytesIO
+from xhtml2pdf import pisa
+from loan.models import SavingTransaction
+
+
+def generate_receipt_pdf(request, transaction_id):
+    try:
+        # Get the transaction from the database
+        transaction = SavingTransaction.objects.get(id=transaction_id)
+    except SavingTransaction.DoesNotExist:
+        return HttpResponse("Transaction not found.", status=404)
+
+    context = {
+        'transaction': transaction
+    }
+
+    # Render the receipt template to HTML
+    receipt_html = render_to_string('rider/receipt.html', context)
+
+    # Create a file-like buffer to receive PDF data
+    buffer = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(receipt_html.encode("UTF-8")), buffer)
+
+    if not pdf.err:
+        # Get the value of the BytesIO buffer and write it to the response
+        pdf_value = buffer.getvalue()
+        buffer.close()
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="receipt_{transaction_id}.pdf"'
+        response.write(pdf_value)
+        return response
+
+    return HttpResponse('Error generating PDF!')
 

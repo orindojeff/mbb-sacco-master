@@ -8,6 +8,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rider/', include('client.rider.urls')),
+    path('dispatch/', include('client.dispatch.urls')),
     path('sales/', include('staff.sales.urls')),
     path('driver/', include('staff.driver.urls')),
     path('finance/', include('staff.finance.urls')),

@@ -1,0 +1,25 @@
+{% extends 'rider/layouts/base.html' %}
+{% block title %}Loan Details{% endblock %}
+{% block content %}
+
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <h5>Loan Details</h5>
+                <p>Amount: {{ loan.amount }}</p>
+                <p>Amount Repayable: {{ loan.get_total_amount_to_repay }}</p>
+                <p>Repayment Period: {{ loan.get_type_display }}</p>
+                <p>Status: {{ loan.get_status_display }}</p>
+                <!-- Add other fields you want to display -->
+
+                {% if not loan.is_complete %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

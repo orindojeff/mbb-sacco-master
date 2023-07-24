@@ -55,31 +55,32 @@
 <body>
     <div class="header">
         <h1>MIGORI BODA BODA SACCO</h1>
+        <h1>Withdrawal Receipt</h1>
         <p>983, Migori Town Kenya</p>
         <p>Phone: +25417445899 | Email: mbbsacco@agmail.com</p>
     </div>
     <div class="body">
-        <div class="details">
-            <p>Receipt #: {{ withdrawal.pk }}</p>
-            <p>Date: {{ withdrawal.created|date:"M d, Y" }}</p>
-        </div>
-        <table class="item-list">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ withdrawal.description }}</td>
-                    <td>{{ withdrawal.amount }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="total">
-            <p>Total: {{ withdrawal.amount }}</p>
-        </div>
+    <div class="details" style="font-size: 18px;">
+        <p>Receipt #: {{ withdrawal.pk }}</p>
+        <p>Date: {{ withdrawal.created|date:"M d, Y" }}</p>
     </div>
-</body>
+    <table class="item-list" style="font-size: 18px;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ withdrawal.user.name}}</td>
+                <td>{{ withdrawal.amount }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="total" style="font-size: 18px;">
+        <p>Total: {{ withdrawal.amount }}</p>
+    </div>
+</div>
+
 </html>

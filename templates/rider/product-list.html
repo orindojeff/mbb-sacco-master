@@ -14,6 +14,7 @@
               <h5 class="card-title text-capitalize mb-0">{{ product.name }}</h5>
                 </a>
                 <p class="mb-0">{{ product.amount }}</p>
+                <p class="mb-0">Available: {{ product.quantity }}</p>
                 <p class="text-uppercase h6"><b>Type: </b>{{ product.category.name }}</p>
                 <a href="{% url 'rider:add-to-cart' product_id=product.pk %}" class="btn btn-primary btn-sm shadow"><i class="bi bi-cart-plus"></i>
             <small>Add to cart</small></a>

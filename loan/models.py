@@ -39,10 +39,15 @@ class SavingTransaction(TimeStampModel):
     confirmed = models.BooleanField(default=False)
 
 
+
+    def __str__(self):
+        return self.saving.user.username
+
 from datetime import date
 from datetime import timedelta
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from decimal import Decimal, ROUND_HALF_UP
 
 
 class LoanApplication(TimeStampModel):
@@ -61,6 +66,7 @@ class LoanApplication(TimeStampModel):
     amount = MoneyField(max_digits=14, decimal_places=2, default_currency='KES')
     purpose = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.PENDING)
+    is_complete = models.BooleanField(default=False)
     type = models.CharField(max_length=2, choices=LoanType.choices, default=LoanType.MONTHLY)
 
 
@@ -76,6 +82,35 @@ class LoanApplication(TimeStampModel):
             return self.created + relativedelta(years=+1)
         else:
             return None
+
+
+    from decimal import Decimal, ROUND_HALF_UP
+
+    def get_total_amount_to_repay(self):
+        """
+        Calculate the total amount to be repaid by the user, including interest charges.
+        Assumes a 3 percent monthly charge on the loan amount.
+        """
+        interest_rate = Decimal('0.03')  # 3 percent monthly charge
+        num_of_months = 0
+
+        if self.type == self.LoanType.MONTHLY:
+            num_of_months = 1
+        elif self.type == self.LoanType.THREE_MONTHS:
+            num_of_months = 3
+        elif self.type == self.LoanType.HALF_YEAR:
+            num_of_months = 6
+        elif self.type == self.LoanType.YEARLY:
+            num_of_months = 12
+
+        total_interest = self.amount.amount * interest_rate * num_of_months
+        total_amount_to_repay = self.amount.amount + total_interest
+
+        # Round the total_amount_to_repay to two decimal places
+        total_amount_to_repay = total_amount_to_repay.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+        return total_amount_to_repay
+
 
 timedelta(days=365)
 

@@ -1,0 +1,43 @@
+{% for order in object_list %}
+<div class="modal fade" id="order-{{ order.transaction_id }}" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title h1">Order id: {{ order.transaction_id}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+                {% if not order.assigned %}
+                     <div class="card mb-3">
+                        <div class="card-body">
+                          <h5 class="card-title">Assign Driver Order</h5>
+                            <form method="POST" action="{% url 'sales:assign-driver-loan-order' pk=order.pk %}">
+                                {% csrf_token %}
+                                <div class="col-12">
+                                    <label class="form-label">Select Driver</label>
+                                    <select name="driver" class="form-control" required>
+                                        <option disabled>Select Driver</option>
+                                        {% for driver in drivers %}
+                                            <option value="{{ driver.pk }}">{{ driver }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-12">
+                                    <button type="submit" class="btn btn-primary shadow">
+                                      Assign Driver
+                                    </button>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- End Card with an image on left -->
+                {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endfor %}

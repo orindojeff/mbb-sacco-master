@@ -14,6 +14,7 @@
               <thead>
                 <tr>
                   <th scope="col"><small>User</small></th>
+                  <th scope="col"><small>Date</small></th>
                   <th scope="col"><small>Amount</small></th>
                   <th scope="col"><small>Status</small></th>
                   <th scope="col"><small>Action</small></th>
@@ -24,6 +25,7 @@
                 {% if saving.status == 'PG' %}
                 <tr>
                   <td><small>{{ saving.user.name }}</small></td>
+                  <td><small>{{ saving.created }}</small></td>
                   <td><small>{{ saving.amount }}</small></td>
                   <td><small>{{ saving.get_status_display }}</small></td>
                   <td>

@@ -257,8 +257,12 @@ from django.shortcuts import redirect
 from django.http import Http404
 from django.db.models import F
 from loan.models import Account
-
 from djmoney.money import Money
+
+from django.shortcuts import render
+from django.views.generic import ListView
+from loan.models import Account, Saving
+from django.http import Http404
 
 class PendingSavingsListView(ListView):
     model = Saving
@@ -288,9 +292,9 @@ class PendingSavingsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.method == 'POST':
-            context['saving_id'] = self.request.POST.get('saving_id')
+        context['pending_savings'] = Saving.objects.filter(status=Saving.Status.PENDING)
         return context
+
 
 from django.shortcuts import render
 from loan.models import Account

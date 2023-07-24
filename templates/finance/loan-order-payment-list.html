@@ -16,6 +16,7 @@
                 <th scope="col"><small>Customer</small></th>
                 <th scope="col"><small>Mpesa</small></th>
                 <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>Date</small></th>
                 <th scope="col"><small>Action</small></th>
               </tr>
             </thead>
@@ -24,6 +25,7 @@
               <tr>
                 <td><small>{{ order.order.user.name }}</small></td>
                 <td><small>{{ order.mpesa_code }}</small></td>
+                <td><small>{{ order.created }}</small></td>
                 <td><small>{{ order.amount }}</small></td>
                 <td>
                     {% if not order.confirm %}

@@ -15,6 +15,7 @@
               <tr>
                 <th scope="col"><small>Applicant</small></th>
                 <th scope="col"><small>Mpesa</small></th>
+                <th scope="col"><small>Date</small></th>
                 <th scope="col"><small>Amount</small></th>
                 <th scope="col"><small>Action</small></th>
               </tr>
@@ -24,6 +25,7 @@
               <tr>
                 <td><small>{{ loan.repayment.loan.user.name }}</small></td>
                 <td><small>{{ loan.mpesa_code }}</small></td>
+                <td><small>{{ loan.created }}</small></td>
                 <td><small>{{ loan.amount }}</small></td>
                 <td>
                     {% if not loan.confirmed %}

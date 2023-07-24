@@ -61,6 +61,14 @@
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/rider/saving/" %}collapsed{% endif %}" href="{% url 'rider:transaction-list' %}">
+          <i class="bi bi-receipt"></i>
+          <span>Contribution Receipts</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+
+      <li class="nav-item">
         <a class="nav-link {% if not request.path == "/rider/product-list/" %}collapsed{% endif %}" href="{% url 'rider:product-list' %}">
           <i class="bi bi-bicycle"></i>
           <span>Products</span>

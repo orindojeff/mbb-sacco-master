@@ -8,7 +8,7 @@ from client.rider.views import DashboardView, AppliedLoanListView, FAQListView, 
     pick_loan_order, PickUpStationUpdateView, SelectedPickUpStationListView, OrderDeliveryListView, \
     LoanOrderDeliveryListView, select_pickup_station, OrderDeliveryDetailView, SavingsWithdrawalCreateView, \
     FeedbackCreateView, confirm_order_picked, SavingsWithdrawalListView, SavingsWithdrawalPdfView, LoanRepaymentPdfView,\
-    LoanRepaymentPdfView, OrderPdfView
+    LoanRepaymentPdfView, OrderPdfView, LoanDetailView, SavingTransactionListView, generate_receipt_pdf
 
 app_name = "rider"
 
@@ -60,6 +60,10 @@ urlpatterns = [
     path('withdrawals/<int:pk>/pdf/', SavingsWithdrawalPdfView.as_view(), name='savings-withdrawal-pdf'), 
     path('loan-repayment/<int:pk>/pdf/', LoanRepaymentPdfView.as_view(), name='loan-repayment-pdf'),
     path('order/<int:order_id>/pdf/', OrderPdfView.as_view(), name='order-pdf'),
+    path('loan/<int:pk>/', LoanDetailView.as_view(), name='loan-detail'),
+
+    path('transactions/', SavingTransactionListView.as_view(), name='transaction-list'),
+    path('generate-receipt/<int:transaction_id>/', generate_receipt_pdf, name='generate-receipt'),
 
 ]
 

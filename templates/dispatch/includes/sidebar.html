@@ -1,0 +1,48 @@
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/" %}collapsed{% endif %}" href="{% url 'dispatch:index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+       
+
+{#      <li class="nav-heading">Orders</li>#}
+
+      
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/dispatch/order-list/" %}collapsed{% endif %}" href="{% url 'dispatch:order-list' %}">
+          <i class="bi bi-truck"></i>
+          <span>Orders List</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/dispatch/loan-order-list/" %}collapsed{% endif %}" href="{% url 'dispatch:loan-order-list' %}">
+          <i class="bi bi-safe2-fill"></i>
+          <span>Loan Orders List</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+        <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/feedback/" %}collapsed{% endif %}" href="{% url 'dispatch:feedback' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>Feedback</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link {% if not request.path == "/sales/faq-list/" %}collapsed{% endif %}" href="{% url 'dispatch:faq-list' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

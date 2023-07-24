@@ -16,6 +16,8 @@ class User(AbstractUser):
         RIDER = 'RD', _('Rider')
         CUSTOMER = 'CM', _('Customer')
         SUPPLIER = 'SP', _('Supplier')
+        DISPATCH_MANAGER = 'DP', _('Dispatch')
+
 
     type = models.CharField(max_length=2, choices=UserTypes.choices, default=UserTypes.CUSTOMER)
     name = models.CharField(max_length=250)

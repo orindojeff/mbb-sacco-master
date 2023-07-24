@@ -15,6 +15,7 @@
               <tr>
                 <th scope="col"><small>Applicant</small></th>
                 <th scope="col"><small>Amount</small></th>
+                <th scope="col"><small>Date</small></th>
                 <th scope="col"><small>Status</small></th>
                 <th scope="col"><small>Type</small></th>
                 <th scope="col"><small>Purpose</small></th>
@@ -26,6 +27,7 @@
               <tr>
                 <td><small>{{ loan.user }}</small></td>
                 <td><small>{{ loan.amount }}</small></td>
+                <td><small>{{ loan.created }}</small></td>
                 <td><small>{{ loan.get_status_display }}</small></td>
                 <td><small>{{ loan.get_type_display }}</small></td>
                 <td><small>{{ loan.purpose }}</small></td>
