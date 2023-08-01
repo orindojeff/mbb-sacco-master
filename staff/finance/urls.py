@@ -3,7 +3,9 @@ from django.urls import path
 from staff.finance.views import DashboardView, LoanRepaymentList, OrderPaymentList, LoanOrderPaymentList, \
     confirm_loan_repayment, confirm_order_payment, confirm_loan_order_payment, FAQListView, ProfileView, \
     UserChangePasswordView, ApprovedLoanRepaymentList, ApprovedOrderPaymentList, ApprovedLoanOrderPaymentList, \
-    FeedbackCreateView, FeedbackListView, LoanApplicationListView, confirm_loan, PendingSavingsListView, ApprovedSavingsListView, account_total_view
+    FeedbackCreateView, FeedbackListView, LoanApplicationListView, confirm_loan, PendingSavingsListView, \
+    ApprovedSavingsListView, \
+    account_total_view, ApprovedSavingsPDFView, OrdersPDF, LoansPDF
 
 app_name = "finance"
 
@@ -33,4 +35,8 @@ urlpatterns = [
          name="approved-savings-list"),
     path('account-total', account_total_view, name="account-total"),
     path('', DashboardView.as_view(), name="index"),
+
+    path('pdf/approved-savings/', ApprovedSavingsPDFView.as_view(), name='approved_savings_pdf'),
+    path('pdf/orders/', OrdersPDF.as_view(), name='order_pdf'),
+    path('pdf/loan/', LoansPDF.as_view(), name='loan_pdf'),
 ]

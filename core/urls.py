@@ -6,7 +6,7 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, 
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('rider/', include('client.rider.urls')),
     path('dispatch/', include('client.dispatch.urls')),
     path('sales/', include('staff.sales.urls')),

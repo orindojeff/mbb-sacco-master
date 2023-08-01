@@ -16,7 +16,6 @@ from stock.models import OrderPayment, LoanOrderInstallments
 from django.http import Http404
 
 
-
 class DashboardView(TemplateView):
     template_name = "finance/index.html"
 
@@ -91,7 +90,6 @@ class ApprovedLoanOrderPaymentList(ListView):
 
 from django.shortcuts import get_object_or_404, redirect
 
-
 from decimal import Decimal
 from django.db.models import F
 
@@ -100,7 +98,7 @@ def confirm_loan_repayment(request, pk):
     loan_repayment_obj = get_object_or_404(LoanRepaymentTransaction, pk=pk)
     loan_repayment_obj.confirmed = True
     loan_repayment_obj.save()
-    
+
     # Update LoanApplication amount
     loan_application = loan_repayment_obj.repayment.loan
     loan_application.amount -= loan_repayment_obj.amount
@@ -113,8 +111,6 @@ def confirm_loan_repayment(request, pk):
 
     messages.success(request, "Payment has been approved successfully")
     return redirect('finance:loan-repayment-list')
-
-
 
 
 def confirm_order_payment(request, pk):
@@ -206,7 +202,6 @@ class LoanApplicationListView(ListView):
 #     return redirect("finance:loan-list")
 
 
-
 # def confirm_loan(request, pk):
 #     loan = get_object_or_404(LoanApplication, pk=pk)
 #     if loan.status != "AP":
@@ -224,6 +219,7 @@ class LoanApplicationListView(ListView):
 #     return redirect("finance:loan-list")
 
 from decimal import Decimal
+
 
 def confirm_loan(request, pk):
     loan = get_object_or_404(LoanApplication, pk=pk)
@@ -245,12 +241,11 @@ def confirm_loan(request, pk):
             messages.success(request, "Loan has been approved successfully")
         else:
             balance = account.amount if account else 0
-            messages.warning(request, f"Loan amount exceeds available funds in MBB Sacco Account. MBB Sacco Account balance is {balance}.")
+            messages.warning(request,
+                             f"Loan amount exceeds available funds in MBB Sacco Account. MBB Sacco Account balance is {balance}.")
     else:
         messages.warning(request, "Loan is already approved")
     return redirect("finance:loan-list")
-
-
 
 
 from django.shortcuts import redirect
@@ -263,6 +258,7 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from loan.models import Account, Saving
 from django.http import Http404
+
 
 class PendingSavingsListView(ListView):
     model = Saving
@@ -300,12 +296,10 @@ from django.shortcuts import render
 from loan.models import Account
 
 
-
 def account_total_view(request):
     account = Account.objects.get(id=1)  # Assuming the account ID is always 1
     context = {'account': account}
     return render(request, 'finance/account_total.html', context)
-
 
 
 class ApprovedSavingsListView(ListView):
@@ -315,3 +309,119 @@ class ApprovedSavingsListView(ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(status=Saving.Status.APPROVED)
+
+
+from django.views.generic import View
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from io import BytesIO
+
+from django.views import View
+from django.http import HttpResponse
+from django.template.loader import get_template
+from io import BytesIO
+from loan.models import SavingTransaction, Saving
+from xhtml2pdf import pisa
+
+#
+# class ApprovedSavingsPDFView(View):
+#     def get(self, request):
+#         # Get all saving transactions
+#         transactions = SavingTransaction.objects.all()
+#
+#         # Prepare the context with all transactions
+#         context = {
+#             'transactions': transactions,
+#         }
+#
+#         # Load the template for the PDF using Django's template loader
+#         template = get_template(
+#             'finance/receipts/savings-report.html')  # Replace 'path_to_your_template.html' with the actual path
+#
+#         # Render the template with the context data to generate HTML content
+#         html = template.render(context)
+#
+#         # Create a file-like buffer to receive PDF data
+#         buffer = BytesIO()
+#
+#         # Generate the PDF from the HTML content
+#         pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), buffer)
+#
+#         if not pdf.err:
+#             # Get the value of the BytesIO buffer and close it
+#             pdf_value = buffer.getvalue()
+#             buffer.close()
+#
+#             # Create an HttpResponse with the PDF content
+#             response = HttpResponse(content_type='application/pdf')
+#             response['Content-Disposition'] = 'filename="all_savings_transactions.pdf"'
+#             response.write(pdf_value)
+#             return response
+#
+#         return HttpResponse('Error generating PDF!')
+
+
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from staff.mixins import PDFGeneratorMixin
+
+
+class ApprovedSavingsPDFView(PDFGeneratorMixin, View):
+    def get(self, request):
+        # Get all saving transactions
+        transactions = SavingTransaction.objects.all()
+
+        # Prepare the context with all transactions
+        context = {
+            'transactions': transactions,
+        }
+
+        # Define the template path
+        template_path = 'finance/receipts/savings-report.html'  # Replace with the actual path
+
+        # Generate the PDF response using the mixin method
+        filename = 'all_savings_transactions'
+        return self.generate_pdf_response(transactions, context, template_path, filename)
+
+
+from stock.models import OrderPayment
+
+
+class OrdersPDF(PDFGeneratorMixin, View):
+    def get(self, request):
+        # Get all saving transactions
+        orders = OrderPayment.objects.all()
+
+        # Prepare the context with all transactions
+        context = {
+            'orders': orders,
+        }
+
+        # Define the template path
+        template_path = 'finance/receipts/order-report.html'  # Replace with the actual path
+
+        # Generate the PDF response using the mixin method
+        filename = 'all_orders'
+        return self.generate_pdf_response(orders, context, template_path, filename)
+
+
+class LoansPDF(PDFGeneratorMixin, View):
+    def get(self, request):
+        # Get all saving transactions
+        orders = LoanApplication.objects.all()
+
+        # Prepare the context with all transactions
+        context = {
+            'orders': orders,
+        }
+
+        # Define the template path
+        template_path = 'finance/receipts/loan_report.html'  # Replace with the actual path
+        template_path = 'finance/receipts/loan_report.html'  # Replace with the actual path
+
+        # Generate the PDF response using the mixin method
+        filename = 'all_orders'
+        return self.generate_pdf_response(orders, context, template_path, filename)

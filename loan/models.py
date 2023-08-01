@@ -21,7 +21,6 @@ class Saving(TimeStampModel):
     amount = MoneyField(max_digits=14, decimal_places=2, default_currency='KES', null=True)
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.PENDING)
 
-
     def loan_limit(self):
         limit = 0
         if self.amount:
@@ -38,10 +37,9 @@ class SavingTransaction(TimeStampModel):
     mpesa_code = models.CharField(max_length=10)
     confirmed = models.BooleanField(default=False)
 
-
-
     def __str__(self):
         return self.saving.user.username
+
 
 from datetime import date
 from datetime import timedelta
@@ -69,8 +67,6 @@ class LoanApplication(TimeStampModel):
     is_complete = models.BooleanField(default=False)
     type = models.CharField(max_length=2, choices=LoanType.choices, default=LoanType.MONTHLY)
 
-
-
     def get_due_date(self):
         if self.type == self.LoanType.MONTHLY:
             return self.created + relativedelta(months=+1)
@@ -83,6 +79,8 @@ class LoanApplication(TimeStampModel):
         else:
             return None
 
+    def get_status_display(self):
+        return self.Status(self.status).label
 
     from decimal import Decimal, ROUND_HALF_UP
 
@@ -114,9 +112,11 @@ class LoanApplication(TimeStampModel):
 
 timedelta(days=365)
 
+
 class LoanAccount(TimeStampModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = MoneyField(max_digits=14, decimal_places=2, default_currency='KES', default=0)
+
 
 class Account(TimeStampModel):
     name = models.CharField(max_length=255, null=True)
@@ -151,9 +151,6 @@ class LoanRepayment(TimeStampModel):
         return installment
 
 
-
-
-
 class LoanRepaymentTransaction(TimeStampModel):
     repayment = models.ForeignKey(LoanRepayment, on_delete=models.CASCADE)
     amount = MoneyField(max_digits=14, decimal_places=2, default_currency='KES')
@@ -167,9 +164,6 @@ class LoanRepaymentTransaction(TimeStampModel):
         self.repayment.save()
 
 
-
-
 class SavingsWithdrawal(TimeStampModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="savings_withdrawal")
     amount = MoneyField(max_digits=14, decimal_places=2, default_currency='KES')
-
