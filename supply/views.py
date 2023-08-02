@@ -1,11 +1,16 @@
+from io import BytesIO
+
+from django.template.loader import render_to_string
 from django.views.generic import ListView
 from django.db.models import Q
 from django.forms import inlineformset_factory
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.contrib import messages
+from xhtml2pdf import pisa
+
 from .forms import *
 from django.shortcuts import get_object_or_404, render
 import random
@@ -20,11 +25,9 @@ from django.db import transaction
 from django.urls import reverse_lazy
 
 
-
-
 def supplier(request):
     user = request.user
-    all_tenders_count = SupplyTender.objects.filter( user=user).count()
+    all_tenders_count = SupplyTender.objects.filter(user=user).count()
     pending_tenders_count = SupplyTender.objects.filter(tender_status='Pending', user=user).count()
     complete_tenders_count = SupplyTender.objects.filter(tender_status='Complete', user=user).count()
     context = {
@@ -33,8 +36,6 @@ def supplier(request):
         'complete_tenders_count': complete_tenders_count,
     }
     return render(request, 'supplier/index.html', context=context)
-
-
 
 
 class SupplyTenderCreateView(CreateView):
@@ -58,6 +59,7 @@ class PendingSupplyTenderListView(ListView):
 
 from .models import SupplyTender
 
+
 class PendingTenderListView(LoginRequiredMixin, ListView):
     model = SupplyTender
     template_name = 'supplier/supplier_pending_tenders.html'
@@ -76,14 +78,15 @@ class PendingTenderListView(LoginRequiredMixin, ListView):
             tender = SupplyTender.objects.get(id=tender_id)
             tender.price = price
 
-
-
             tender.tender_status = 'Accepted'
             tender.user = request.user  # set the supplied_by attribute to the current user
             tender.save()
-            messages.success(request, '{} Thanks for acccepting our tender request.Please  Wait for confirmation.'.format(request.user.get_full_name()))
-    
+            messages.success(request,
+                             '{} Thanks for acccepting our tender request.Please  Wait for confirmation.'.format(
+                                 request.user.get_full_name()))
+
         return redirect('supplier:supplier_pending_tenders')
+
 
 # class PendingApprovalTenderListView(ListView):
 #     model = SupplyTender
@@ -128,11 +131,8 @@ class PendingApprovalTenderListView(LoginRequiredMixin, ListView):
         tender.tender_status = status
         tender.save()
 
-      
         messages.success(request, 'Tender status has been successfully updated.')
         return redirect('supplier:pending_approval_tenders')
-
-
 
 
 class ApprovedSupplierTenderListView(LoginRequiredMixin, ListView):
@@ -142,7 +142,7 @@ class ApprovedSupplierTenderListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         # Filter the supply tenders by tender_status = 'Accepted' and user_id = the logged-in user's id
-        return SupplyTender.objects.filter(tender_status='Approved', user_id=self.request.user.id )
+        return SupplyTender.objects.filter(tender_status='Approved', user_id=self.request.user.id)
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -151,12 +151,12 @@ class ApprovedSupplierTenderListView(LoginRequiredMixin, ListView):
         tender = SupplyTender.objects.get(id=tender_id)
         tender.tender_status = status
         tender.save()
-        messages.success(request, '{} Thanks for supplying our tender request.Please  Wait for payment confirmation.'.format(request.user.get_full_name()))
+        messages.success(request,
+                         '{} Thanks for supplying our tender request.Please  Wait for payment confirmation.'.format(
+                             request.user.get_full_name()))
 
-      
         messages.success(request, '.')
         return redirect('supplier:approved-supplier-tenders')
-
 
 
 class SupplierConfirmRecievedPayments(LoginRequiredMixin, ListView):
@@ -175,13 +175,11 @@ class SupplierConfirmRecievedPayments(LoginRequiredMixin, ListView):
         tender = SupplyTender.objects.get(id=tender_id)
         tender.tender_status = status
         tender.save()
-        messages.success(request, '{} Thanks for confirmining tender payment received.'.format(request.user.get_full_name()))
+        messages.success(request,
+                         '{} Thanks for confirmining tender payment received.'.format(request.user.get_full_name()))
 
-      
         messages.success(request, '.')
         return redirect('supplier:approved-supplier-tenders')
-
-
 
 
 class SuppliedTenderListView(ListView):
@@ -193,6 +191,7 @@ class SuppliedTenderListView(ListView):
         # Filter the supply tenders by tender_status = 'Pending' and user_id = the logged-in user's id
         return SupplyTender.objects.filter(tender_status='Supplied', user_id=self.request.user.id)
 
+
 class confirmedSupplierTenderListView(ListView):
     model = SupplyTender
     template_name = 'supplier/confirmed_supplied_tenders.html'
@@ -201,7 +200,6 @@ class confirmedSupplierTenderListView(ListView):
     def get_queryset(self):
         # Filter the supply tenders by tender_status = 'Pending' and user_id = the logged-in user's id
         return SupplyTender.objects.filter(tender_status='Confirmed', user_id=self.request.user.id)
-
 
 
 class RejectedSupplierTenderListView(ListView):
@@ -224,8 +222,8 @@ class CompleteTenderListView(ListView):
         return SupplyTender.objects.filter(tender_status='Complete', user_id=self.request.user.id)
 
 
-
 from django.db import transaction
+
 
 class ConfirmTenderListView(ListView):
     model = SupplyTender
@@ -253,7 +251,6 @@ class ConfirmTenderListView(ListView):
         return redirect('supplier:confirm-tenders')
 
 
-
 class InventoryConfirmTenderListView(ListView):
     model = SupplyTender
     template_name = 'supplier/inventory_confirmed_tenders.html'
@@ -261,7 +258,6 @@ class InventoryConfirmTenderListView(ListView):
 
     def get_queryset(self):
         return SupplyTender.objects.filter(tender_status='Confirmed')
-
 
 
 class FinanceSupplierTenderListView(ListView):
@@ -286,7 +282,6 @@ class FinanceSupplierTenderListView(ListView):
         return redirect('supplier:pay-tenders')
 
 
-
 class PaidTenderListView(ListView):
     model = SupplyTender
     template_name = 'supplier/paid_supply_tenders.html'
@@ -305,3 +300,35 @@ class ConfirmedPaidTenderListView(ListView):
     def get_queryset(self):
         # Filter the supply tenders by tender_status = 'Pending' and user_id = the logged-in user's id
         return SupplyTender.objects.filter(tender_status='Complete')
+
+
+def tender_receipt(request, tender_id):
+    tender = get_object_or_404(SupplyTender, id=tender_id, tender_status='Complete')
+
+    receipt_data = {
+        'transaction_id': tender.id,
+        'username': tender.user.get_full_name,
+        'quantity': tender.quantity,
+        'total_cost': tender.total(),
+        'payment_status': tender.tender_status,
+        'date_ordered': tender.date,
+        'product': tender.product.name,
+        'price': tender.price,
+    }
+
+    # Render the receipt HTML template
+    receipt_html = render_to_string('supplier/supplier-receipt.html', receipt_data)
+
+    # Create a file-like buffer to receive PDF data
+    pdf_buffer = BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+    pisa_status = pisa.CreatePDF(receipt_html, dest=pdf_buffer)
+
+    # Return the receipt PDF as a downloadable response
+    if pisa_status.err:
+        return HttpResponse('An error occurred: %s' % pisa_status.err)
+    else:
+        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename=Receipt_{tender.id}.pdf'
+        return response
